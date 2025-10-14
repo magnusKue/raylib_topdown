@@ -6,8 +6,8 @@
 
 tile_t* create_tile(int tile_size, int x, int y) {
     // allocate memory 
-    tile* tile_p = malloc(sizeof(tile_t));
-    if (!tile) { printf("[!] malloc failed"); exit(1); }
+    tile_t* tile_p = malloc(sizeof(tile_t));
+    if (!tile_p) { printf("[!] malloc failed"); exit(1); }
     
     // write properties
     tile_p->rect = (Rectangle) {

@@ -7,16 +7,16 @@
 #include "../include/tilemap.h"
 
 int main() {
-    unsigned long time = 0;
+    unsigned long time_us = 0; // time in µs
     
-    create_tile
+    // create_tile
 
     window_t window;
     player_t player;
     camera_t camera;
 
     // Initialize components
-    init_window(&window, "Game", 800, 600, 0.3);
+    init_window(&window, "Game", 800*2, 600*2, 0.3);
     init_player(&player);
     init_camera(&camera);
 
@@ -28,11 +28,11 @@ int main() {
         // RENDER
         start_render(&window, &camera);
         
-            render_player(&player, time);
+            render_player(&player, (int)time_us/1000);
 
         render_to_window(&window, &camera);
 
-        time += GetFrameTime() * 1000;
+        time_us += GetFrameTime() * 1000000;
     }
 
     // cleanup_window(&window);

@@ -1,4 +1,6 @@
+#include <stdio.h>
 #include <raylib.h>
+
 #include "../include/camera.h"
 #include "../include/player.h"
 #include "../include/window.h"
@@ -10,6 +12,8 @@ void init_window(window_t* window, char* title, int width, int height, float sca
         (int)height*scaler
     );
     window->scaler=scaler;
+
+    // SetTargetFPS(120);
 }
 
 void start_render(window_t* window, camera_t* camera) {
@@ -41,5 +45,11 @@ void render_to_window(window_t* window, camera_t* camera) {
             0.0f, 
             WHITE
         );
+
+        // Draw FPS
+        char fps[12];
+        sprintf(fps, "%11d", GetFPS());
+
+        DrawText(fps, 5.0, 5.0, 16.0, WHITE);
     EndDrawing();
 }
