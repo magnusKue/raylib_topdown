@@ -4,9 +4,12 @@
 #include "../include/window.h"
 #include "../include/player.h"
 #include "../include/camera.h"
+#include "../include/tilemap.h"
 
 int main() {
     unsigned long time = 0;
+    
+    create_tile
 
     window_t window;
     player_t player;

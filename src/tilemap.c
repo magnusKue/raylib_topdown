@@ -1,20 +1,25 @@
 #include <raylib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "../include/tilemap.h"
 
-// Each Tilesheet gets sliced into Tileset 
-// 
-// Tileset contains list of tile_t objects
-// Tile ID is index in list
-// TileMap stores list of IDs
-// To get the tile with ID 2 in tileset 1:
-// tileset_t* tileset = tilesetman.tilesets[1]
-// tileset->tiles[2]
+tile_t* create_tile(int tile_size, int x, int y) {
+    // allocate memory 
+    tile* tile_p = malloc(sizeof(tile_t));
+    if (!tile) { printf("[!] malloc failed"); exit(1); }
+    
+    // write properties
+    tile_p->rect = (Rectangle) {
+        .x=x,
+        .y=y,
+        .width=tile_size,
+        .height=tile_size
+    };
 
-tile_t* slice_tileset(Image2D spritesheet) {
-
+    // return pointer
+    return tile_p;
 }
-
 
 void render_tilemap(void) {
     
