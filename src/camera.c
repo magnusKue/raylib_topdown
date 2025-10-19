@@ -16,5 +16,5 @@ void init_camera(camera_t* camera) {
 }
 
 void update_camera(camera_t* camera, player_t* player) {
-    //camera->cam.target = player->position;
+    // camera->cam.target = player->position;
 }

@@ -5,7 +5,7 @@
 #include "../include/player.h"
 #include "../include/window.h"
 
-void init_window(window_t* window, char* title, int width, int height, float scaler) {
+void init_window(window_t* window, char* title, int width, int height, float scaler, int maxFps) {
     InitWindow(width, height, title);
     window->rtex = LoadRenderTexture(
         (int)width*scaler, 
@@ -13,7 +13,7 @@ void init_window(window_t* window, char* title, int width, int height, float sca
     );
     window->scaler=scaler;
 
-    // SetTargetFPS(120);
+    SetTargetFPS(600);
 }
 
 void start_render(window_t* window, camera_t* camera) {

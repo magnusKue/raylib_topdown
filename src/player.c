@@ -9,7 +9,7 @@
 void init_player(player_t* player) {
     // visual
     player->state = IDLE;
-    player->anim_speed = 0.01f;
+    player->anim_speed = 0.008f;
     player->flipped = false;
 
     player->texture = LoadTexture("assets/player.png");
@@ -41,7 +41,6 @@ Rectangle get_player_sprite(player_t* player, unsigned long total_ms) {
         rect_width, 
         size,
     };
-    printf("PLAYER WIDTH: %d\n", rect_width);
     return rect;
 }
 

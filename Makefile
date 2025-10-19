@@ -10,4 +10,6 @@ clean:
 	rm -f $(TARGET)
 
 run: $(TARGET)
-		./$(TARGET)
+	rm -f $(TARGET)
+	gcc $(SRC) -o $(TARGET) $(LIB)
+	./$(TARGET)
