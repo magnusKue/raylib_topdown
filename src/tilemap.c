@@ -97,7 +97,6 @@ void render_tileset(tileset_t* ts) {
     }
 }
 
-
 void render_tilemap(tilemap_t* tmap, tileset_t* tset) {
     for (int r = 0; r < tmap->rows; r++) {
         for (int x = 0; x < tmap->columns; x++) {
