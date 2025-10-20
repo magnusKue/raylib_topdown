@@ -1,0 +1,59 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "sunny_map.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "main.tsx": {
+            "scaleInDock": 1.7326,
+            "scaleInEditor": 4.7516
+        },
+        "map01.tmx": {
+            "scale": 0.9282291666666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 311.88418808214567,
+                "y": 176.14184715520148
+            }
+        },
+        "sunny_map.tmx": {
+            "scale": 0.9678,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 311.5313081215127,
+                "y": 353.89543294069017
+            }
+        },
+        "sunnyside_world.tsx": {
+            "scaleInDock": 1.75,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "/home/magnus/code/c/projects/raylib_topdown/assets/levels/raw",
+    "last.imagePath": "/home/magnus/code/c/projects/raylib_topdown/assets",
+    "map.height": 40,
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 40,
+    "openFiles": [
+        "sunny_map.tmx"
+    ],
+    "project": "test.tiled-project",
+    "recentFiles": [
+        "sunny_map.tmx",
+        "sunnyside_world.tsx",
+        "main.tsx",
+        "map01.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

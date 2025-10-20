@@ -15,7 +15,7 @@ int main() {
 }
 
 int test_tilemap() {
-    InitWindow(800, 600, "My Game");
+    InitWindow(640, 400, "My Game");
     printf("\n--- GAME RUNNING ---\n");
 
     // test tile 
@@ -33,6 +33,9 @@ int test_tilemap() {
             ts->tiles[x]->rect.height
         );
     }
+
+    // test tilemap
+    tilemap_t* tmap = load_tilemap("assets/map01.txt");
 }
 
 int game() {
@@ -45,9 +48,14 @@ int game() {
     camera_t camera;
 
     // Initialize components
-    init_window(&window, "Game", /*RESOLUTION:*/800, 600, /*SCALER:*/0.3, /*FPS:*/600);
+    init_window(&window, "Game", /*RESOLUTION:*/1920/2, 1200/2, /*SCALER:*/0.3, /*FPS:*/600);
     init_player(&player);
     init_camera(&camera);
+
+    
+    tileset_t* tileset = load_tileset(16, "assets/test_tileset2.png");
+    tilemap_t* tilemap_o = load_tilemap("assets/levels/maps/su_test_01_o.csv");
+    tilemap_t* tilemap_tl = load_tilemap("assets/levels/maps/su_test_01_tl.csv");
 
     while (!WindowShouldClose()) {
         // UPDATE
@@ -56,7 +64,9 @@ int game() {
         
         // RENDER
         start_render(&window, &camera);
-        
+            render_tilemap(tilemap_tl,tileset);
+            render_tilemap(tilemap_o,tileset);
+
             render_player(&player, (int)time_us/1000);
 
         render_to_window(&window, &camera);

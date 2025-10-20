@@ -6,15 +6,15 @@
 
 void init_camera(camera_t* camera) {
     Vector2 offset = {
-        GetScreenHeight() / 2.0f,
-        GetScreenWidth() / 2.0f,
+        (GetScreenWidth() * 0.3 / 2.0f) - 8,
+        (GetScreenHeight() * 0.3 / 2.0f) - 8,
     };
-    camera->cam.offset = Vector2Zero();
+    camera->cam.offset = offset;
     camera->cam.target = Vector2Zero();
     camera->cam.rotation = 0.0;
     camera->cam.zoom = 1.0;
 }
 
 void update_camera(camera_t* camera, player_t* player) {
-    // camera->cam.target = player->position;
+    camera->cam.target = player->position;
 }
