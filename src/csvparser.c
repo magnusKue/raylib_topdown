@@ -6,93 +6,117 @@
 #include <stdlib.h>
 
 tilemap_t* csv_to_tilemap(char* csv) {
+    int r, c; // number of rows and columns
+    count_rows_columns(csv, &r, &c);
+    
+    // allocate memory
+    int** array = allocate_2d_array(r, c);
+
+    // read csv into array
+    read_csv_into_array(csv, array, c);
+
+    // print_array2d(array, r, c);
+    
+    // Create, populate and return tilemap object
+    tilemap_t* tm = malloc(sizeof(tilemap_t));
+    tm->tmap = array;
+    tm->rows = r;
+    tm->columns = c;
+    return tm;
+}
+
+void print_array2d(int** array, int rows, int columns) {
+    printf("\n\nPARSED DATA:\n  ");
+
+    for (int r = 0; r < rows; r++) {
+        for (int x = 0; x < columns; x++) {
+            printf("%d ", array[r][x]);
+        }
+        if (!(r == rows-1)) {
+            printf(" \n  ");
+        }
+    }
+    printf("\nROW: [%d] COL: [%d]\n", rows, columns);
+
+}
+
+void read_csv_into_array(char* csv, int** array, int columns) {
     char* text = strdup(csv);
 
-    const char* delimiter = ",";  
-    
-    // FIRST PASS (calc token amount)
+    const char* delimiters = ",\n"; 
 
-    char *token_c;
+    char* token;
 
-    // Get the first token
-    token_c = strtok(text, delimiter);
+    token = strtok(text, delimiters);
 
-    // Walk through other tokens
-    int max_row = 0;
+    int index = 0;
+    int row = 0;
     int column = 0;
-    int max_column = 0;
-    while (token_c != NULL) {
-        if (token_c[0]=='\n') {
-            max_row++;
-            max_column = column > max_column ? column : max_column;
-            column=0;
-        }
-        else {
-            column++;
-        }
-        token_c = strtok(NULL, delimiter);
-    }
-    
-    printf("NUM_COLMN: [%d]\n", max_column);
-    printf("NUM_ROWS : [%d]\n", max_row);
-
-    // ALLOCATE MEMORY
-    int** map_array = calloc((size_t)max_row, sizeof(int*));
-    if (!map_array) { printf("[!] malloc failed"); exit(1); }
-    for (int r = 0; r < max_row; r++) {
-        map_array[r] = (int*)calloc(max_column, sizeof(int));
-        if (!map_array[r]) { printf("[!] malloc failed"); exit(1); }
-    }
-
-    // SECOND PASS (parse tokens)
-    char* text_2 = strdup(csv);
-
-    char *token;
-
-    // Get the first token
-    token = strtok(text_2, delimiter);
-
-    // Walk through other tokens
-    int row_i = 0;
-    int column_i = 0;
 
     while (token != NULL) {
-        if (token[0]=='\n') {
-            // printf("LINE (%d)\n", row_i);
-            row_i++;
-            column_i=0;
-        }
-        else {
-            char *endptr;
-            int num = (int)strtol(token, &endptr, 10); // base 10
+        // calculate 2d position from token index
+        row = index / columns;
+        column = index % columns;
 
-            if (endptr == token) {
-                // printf("ERROR");
-            } else {
-                if (column_i < max_column) { 
-                    map_array[row_i][column_i] = num;
-                    // printf("(%d)'%d', ", column_i, num);
-                }
-            }
+        // populate 2d array
+        int value = (int)strtol(token, NULL, 10); // base 10
+        array[row][column] = value;
 
-            column_i++;
-        }
-
-        token = strtok(NULL, delimiter);
+        // next token
+        index++;
+        token = strtok(NULL, delimiters);
     }
-    
-    // print result
-    printf("\n\nPARSED DATA:\n\n");
+    free(text);
+}
+
+int** allocate_2d_array(int max_row, int max_column) {
+    // ALLOCATE BASE ARRAY
+    int** array_2d = calloc((size_t)max_row, sizeof(int*));
+    if (!array_2d) { printf("[!] malloc failed"); exit(1); }
+
+    // ALLOCATE EACH ROW ARRAY
     for (int r = 0; r < max_row; r++) {
-        for (int x = 0; x < max_column; x++) {
-            printf("%d ", map_array[r][x]);
+        array_2d[r] = (int*)calloc(max_column, sizeof(int));
+        if (!array_2d[r]) { printf("[!] malloc failed"); exit(1); }
+    }
+
+    return array_2d;
+}
+
+void count_rows_columns(char* csv, int* num_rows, int* num_columns) {
+    char* text = strdup(csv);
+
+    const char* newline = "\n";  
+    char* token;
+
+    token = strtok(text, newline);
+
+    // Walk through other tokens
+    int row = 0;
+    int columns = 0;
+    while (token != NULL) {
+        if (!row) { 
+            columns = count_chars(',', token) + 1;
         }
-        printf("\n");
+        row++;
+        token = strtok(NULL, newline);
+    }
+    free(text);
+
+    *num_rows = row;
+    *num_columns = columns;    
+}
+
+int count_chars(char c, char* input_str) {
+    char* str = input_str;
+    int count = 0;
+    
+    while (*str != '\0') {
+        if (*str == c) {
+            count++;
+        }
+        str++; 
     }
     
-    tilemap_t* tm = malloc(sizeof(tilemap_t));
-    tm->tmap = map_array;
-    tm->rows = max_row;
-    tm->columns = max_column;
-    return tm;
+    return count;
 }

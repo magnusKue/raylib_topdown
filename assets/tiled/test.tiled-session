@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "sunny_map.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
         ".",
         "tilesets"
@@ -26,7 +26,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 348.419540229885,
-                "y": 343.03160919540227
+                "y": 173.01245210727967
             }
         },
         "sunnyside_world.tsx": {
@@ -52,7 +52,6 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "sunny_map.tmx"
     ],
     "project": "test.tiled-project",
     "recentFiles": [

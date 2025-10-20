@@ -7,6 +7,7 @@
 
 void init_window(char* title, int width, int height, int maxFps) {
     InitWindow(width, height, title);
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
     SetTargetFPS(600);
 }
 

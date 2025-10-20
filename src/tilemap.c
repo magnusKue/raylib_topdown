@@ -58,7 +58,7 @@ tileset_t* load_tileset(int tile_size, char* tile_sheet_path) {
         }
     }
 
-    printf("Tileset with (%d) tiles created!\n", total_tiles);
+    printf("Tileset with (%d) tiles created!\n\n", total_tiles);
 
     return tileset_p;
 }
@@ -68,6 +68,7 @@ tilemap_t* load_tilemap(char* map_path) {
 
     tilemap_t* tm = (tilemap_t*)csv_to_tilemap(raw_file);
 
+    printf("[!] Tilemap [%s] loaded successfully!\n", map_path);
     return tm;
 }
 
