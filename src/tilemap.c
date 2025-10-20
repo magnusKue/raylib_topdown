@@ -21,7 +21,7 @@ tile_t* create_tile(int tile_size, int x, int y) {
         .height=tile_size
     };
 
-    printf("created tile at (%d|%d) with size (%d)\n", x, y, tile_size);
+    // printf("created tile at (%d|%d) with size (%d)\n", x, y, tile_size);
 
     // return pointer
     return tile_p;
@@ -52,7 +52,7 @@ tileset_t* load_tileset(int tile_size, char* tile_sheet_path) {
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < columns; x++) {
             tileset_p->tiles[index] = (tile_t*)create_tile(tile_size, x * tile_size, y * tile_size);  
-            printf("POSITION: (%f|%f)\n\n", tileset_p->tiles[index]->rect.x, tileset_p->tiles[index]->rect.y);
+            // printf("POSITION: (%f|%f)\n\n", tileset_p->tiles[index]->rect.x, tileset_p->tiles[index]->rect.y);
 
             index++;
         }

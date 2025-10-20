@@ -5,6 +5,7 @@
 #include "../include/player.h"
 #include "../include/camera.h"
 #include "../include/tilemap.h"
+#include "../include/world.h"
 
 int game();
 int test_tilemap();
@@ -45,26 +46,30 @@ int game() {
 
     player_t player;
     camera_t camera;
+    world_t world;
 
     // Initialize components
     init_window("Game", /*RESOLUTION:*/1920/2, 1200/2, /*FPS:*/600);
     init_player(&player);
-    init_camera(&camera, /*ZOOM*/ 4.0);
+    init_camera(&camera, /*ZOOM*/ 3.0);
+    init_world(&world, "assets/levels/maps/test_collision.csv");
 
     
-    tileset_t* tileset = load_tileset(16, "assets/test_tileset2.png");
-    tilemap_t* tilemap_o = load_tilemap("assets/levels/maps/su_test_01_o.csv");
-    tilemap_t* tilemap_tl = load_tilemap("assets/levels/maps/su_test_01_tl.csv");
+    tileset_t* tileset_sunnyside = load_tileset(16, "assets/tilesheets/sunnyside.png");
+    tileset_t* tileset_collision = load_tileset(16, "assets/tilesheets/collision_tilesheet.png");
+
+    tilemap_t* tilemap_objects   = load_tilemap("assets/levels/maps/test_object.csv");
+    tilemap_t* tilemap_ground    = load_tilemap("assets/levels/maps/test_ground.csv");
 
     while (!WindowShouldClose()) {
         // UPDATE
-        update_player(&player);
+        update_player(&player, &world);
         update_camera(&camera, &player);
         
         // RENDER
         start_render(&camera);
-            render_tilemap(tilemap_tl,tileset);
-            render_tilemap(tilemap_o,tileset);
+            render_tilemap(tilemap_ground, tileset_sunnyside);
+            render_tilemap(tilemap_objects, tileset_sunnyside);
 
             render_player(&player, (int)time_us/1000);
 

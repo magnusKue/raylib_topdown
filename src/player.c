@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "../include/player.h"
+#include "../include/world.h"
 
 #define SP_WIDTH 16
 
@@ -12,7 +13,7 @@ void init_player(player_t* player) {
     player->anim_speed = 0.008f;
     player->flipped = false;
 
-    player->texture = LoadTexture("assets/player.png");
+    player->texture = LoadTexture("assets/sprites/player.png");
 
     if (!IsTextureValid(player->texture)) {  printf("WARINING: Player texture loading failed"); return; }
 
@@ -107,7 +108,7 @@ void player_update_state(player_t* player) {
     }
 }
 
-void update_player(player_t* player) {
+void update_player(player_t* player, world_t* world) {
     // printf("PLAYER POS: %f %f\n", player->position.x, player->position.y);
     // printf("PLAYER VEL: %f %f\n", player->velocity.x, player->velocity.y);
 

@@ -2,6 +2,8 @@
 
 #include <raylib.h>
 
+#include "../include/world.h"
+
 typedef enum State {
     // index == spritesheet row
     IDLE=0,
@@ -24,6 +26,6 @@ typedef struct Player {
 } player_t;
 
 void init_player(player_t* player);
-void update_player(player_t* player);
+void update_player(player_t* player, world_t* world);
 void render_player(player_t* player, unsigned long total_ms);
 

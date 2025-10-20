@@ -18,12 +18,13 @@ void start_render(camera_t* camera) {
 }
 
 void render_to_window(camera_t* camera) {
+    // End camera mode
+    EndMode2D();
+
     // Draw FPS
     char fps[12];
-    sprintf(fps, "%11d", GetFPS());
+    sprintf(fps, "%d", GetFPS());
+    DrawText(fps, 10.0, 10.0, /*FNT SIZE*/16.0, WHITE);
 
-    DrawText(fps, 5.0, 5.0, 16.0, WHITE);
-
-    EndMode2D();
     EndDrawing();
 }
