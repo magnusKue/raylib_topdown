@@ -43,14 +43,13 @@ int game() {
     
     // create_tile
 
-    window_t window;
     player_t player;
     camera_t camera;
 
     // Initialize components
-    init_window(&window, "Game", /*RESOLUTION:*/1920/2, 1200/2, /*SCALER:*/0.3, /*FPS:*/600);
+    init_window("Game", /*RESOLUTION:*/1920/2, 1200/2, /*FPS:*/600);
     init_player(&player);
-    init_camera(&camera);
+    init_camera(&camera, /*ZOOM*/ 4.0);
 
     
     tileset_t* tileset = load_tileset(16, "assets/test_tileset2.png");
@@ -63,13 +62,13 @@ int game() {
         update_camera(&camera, &player);
         
         // RENDER
-        start_render(&window, &camera);
+        start_render(&camera);
             render_tilemap(tilemap_tl,tileset);
             render_tilemap(tilemap_o,tileset);
 
             render_player(&player, (int)time_us/1000);
 
-        render_to_window(&window, &camera);
+        render_to_window(&camera);
 
         time_us += GetFrameTime() * 1000000;
     }

@@ -8,5 +8,5 @@ typedef struct Camera {
 } camera_t;
 
 
-void init_camera(camera_t* camera);
+void init_camera(camera_t* camera, float zoom);
 void update_camera(camera_t* camera, player_t* player);
