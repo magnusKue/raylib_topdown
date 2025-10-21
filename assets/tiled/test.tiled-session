@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "sunny_map.tmx",
     "expandedProjectPaths": [
-        ".",
-        "tilesets"
+        "tilesets",
+        "."
     ],
     "fileStates": {
         "main.tsx": {
@@ -17,16 +17,16 @@
             "scale": 0.9282291666666665,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 311.3455279991023,
-                "y": 176.14184715520145
+                "x": 392.14454045561666,
+                "y": 159.98204466389853
             }
         },
         "sunny_map.tmx": {
             "scale": 0.8352,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 348.419540229885,
-                "y": 173.01245210727967
+                "x": 340.0383141762452,
+                "y": 315.493295019157
             }
         },
         "sunnyside_world.tsx": {
@@ -52,15 +52,17 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
+        "map01.tmx",
+        "sunny_map.tmx"
     ],
     "project": "test.tiled-project",
     "recentFiles": [
-        "tilesets/collision.tsx",
+        "map01.tmx",
         "sunny_map.tmx",
+        "tilesets/collision.tsx",
         "tilesets/sunnyside_world.tsx",
         "sunnyside_world.tsx",
-        "main.tsx",
-        "map01.tmx"
+        "main.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

@@ -37,7 +37,8 @@ int start_game() {
         update_player(&player, &world);
         update_camera(&camera, &player);
 
-        if (IsKeyPressed(KEY_TAB)) { toggle_debug_mode(); }
+        if (IsKeyPressed(KEY_TAB)) { get_config_ptr()->render_colliders ^= 1;  }
+        if (IsKeyPressed(KEY_F)) { get_config_ptr()->player_collision ^= 1;  }
 
         // RENDER
         start_render(&camera);

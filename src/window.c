@@ -9,7 +9,7 @@
 void init_window(char* title, int width, int height, int maxFps) {
     InitWindow(width, height, title);
     SetWindowState(FLAG_WINDOW_RESIZABLE);
-    SetTargetFPS(600);
+    SetTargetFPS(1000);
 }
 
 void start_render(camera_t* camera) {
@@ -25,7 +25,7 @@ void render_to_window(camera_t* camera) {
 
     // Draw FPS
     
-    if (get_debug_mode()) {
+    if (get_config_ptr()->render_colliders) {
         char fps[12];
         sprintf(fps, "%d", GetFPS());
         DrawText(fps, 10.0, 10.0, /*FNT SIZE*/24.0, WHITE);

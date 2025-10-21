@@ -58,7 +58,7 @@ void render_player(player_t* player, unsigned long total_ms, world_t* world) {
     };
     DrawTexturePro(player->texture, get_player_sprite(player, total_ms), dest, (Vector2) { 0.0, 0.0 }, 0, WHITE);
     
-    if (get_debug_mode()) {
+    if (get_config_ptr()->render_colliders) {
         DrawRectangleLinesEx(get_player_rect(player), 2.0f, WHITE);
 
         Rectangle** rects = get_tiles_around_player(player, world->col_map);
@@ -246,8 +246,11 @@ void update_player(player_t* player, world_t* world) {
     // printf("PLAYER VEL: %f %f\n", player->velocity.x, player->velocity.y);
 
     player_update_velocity_by_input(player);
-    // player_move_by_velocity(player);
-    player_move_and_collide(player, world);
+    if (get_config_ptr()->player_collision) {
+        player_move_and_collide(player, world);
+    } else {
+        player_move_by_velocity(player);
+    }
     player_face_moving_dir(player);
     player_update_state(player);
     player_apply_friction(player);

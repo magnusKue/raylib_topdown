@@ -1,8 +1,10 @@
 # pragma once
 
-extern bool debug_mode;
+typedef struct Config {
+    bool render_colliders;
+    bool player_collision;
+} config_t;
 
-// Function prototypes
-void set_debug_mode(bool value);
-bool get_debug_mode(void);
-bool toggle_debug_mode(void);
+extern config_t global_config;
+
+config_t* get_config_ptr(void);
