@@ -113,6 +113,74 @@ int get_tile_at(tilemap_t* map, int x, int y) {
     return (int)map->tmap[y][x];
 }
 
+Rectangle get_collision_sub_rect(int tiletype, int bb) {
+    switch (tiletype) {
+        case 2:
+            // right bar
+            return (Rectangle) {
+                0.5*bb, 0.0,
+                0.5*bb, bb,
+            };
+            break;
+        case 3:
+            // bottom bar
+            return (Rectangle) {
+                0.0, 0.5*bb,
+                bb, 0.5*bb,
+            };
+            break;
+        case 4:
+            // top bar
+            return (Rectangle) {
+                0.0, 0.0,
+                bb, 0.5*bb,
+            };
+            break;
+        case 5:
+            // right bar
+            return (Rectangle) {
+                0.0, 0.0,
+                0.5*bb, bb,
+            };
+            break;
+        case 6:
+            // top right block
+            return (Rectangle) {
+                0.5*bb, 0.0,
+                0.5*bb, 0.5*bb,
+            };
+            break;
+        case 7:
+            // bottom right block
+            return (Rectangle) {
+                0.5*bb, 0.5*bb,
+                0.5*bb, 0.5*bb,
+            };
+            break;
+        case 8:
+            // top left block
+            return (Rectangle) {
+                0.0, 0.0,
+                0.5*bb, 0.5*bb,
+            };
+            break;
+        case 9:
+            // bottom left block
+            return (Rectangle) {
+                0.0, 0.5*bb,
+                0.5*bb, 0.5*bb,
+            };
+            break;
+        case 1:
+            // full
+        default:
+            return (Rectangle) {
+                0, 0,
+                bb, bb,
+            };
+    };
+}
+
 void render_collision_tiles(Rectangle** tile_rects) {
     for (int x = 0; x<3; x++) {
         for (int y = 0; y<3; y++) {

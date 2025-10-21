@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 #include "../include/world.h"
+#include "../include/tilemap.h"
 
 typedef enum State {
     // index == spritesheet row
@@ -30,8 +31,8 @@ typedef struct Player {
 
 void init_player(player_t* player);
 void update_player(player_t* player, world_t* world);
-void render_player(player_t* player, unsigned long total_ms, world_t* world);
+void render_player(player_t* player, unsigned long total_ms);
 
 Rectangle get_player_rect(player_t* player);
-Rectangle** get_tiles_around_player(player_t* player, tilemap_t* col_map);
+Rectangle** get_col_tiles_around_player(player_t* player, tilemap_t* col_map);
 

@@ -7,6 +7,7 @@
 #include "../include/tilemap.h"
 #include "../include/world.h"
 #include "../include/config.h"
+#include "../include/debug.h"
 
 int start_game() {
     unsigned long time_us = 0; // time in µs
@@ -46,9 +47,11 @@ int start_game() {
             render_tilemap(tilemap_ground, tileset_sunnyside);
             render_tilemap(tilemap_objects, tileset_sunnyside);
 
-            render_player(&player, (int)time_us/1000, &world);
+            render_player(&player, (int)time_us/1000);
 
             render_tilemap(tilemap_tips, tileset_sunnyside);
+            
+            render_colliders(&player, &world);
 
         render_to_window(&camera);
 

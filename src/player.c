@@ -16,7 +16,7 @@ void init_player(player_t* player) {
     player->flipped = false;
     player->bb_size = 16;
     player->sprite_size = (Vector2) { 8, 8 }; // Bug, collision only works with some values
-    player->sprite_offset = (Vector2) { 0, -3 }; // Bug, collision only works with some values
+    player->sprite_offset = (Vector2) { 0, -5 }; // Bug, collision only works with some values
 
     player->texture = LoadTexture("assets/sprites/player.png");
 
@@ -50,25 +50,15 @@ Rectangle get_player_sprite(player_t* player, unsigned long total_ms) {
     return rect;
 }
 
-void render_player(player_t* player, unsigned long total_ms, world_t* world) {
-    Rectangle dest = {
+void render_player(player_t* player, unsigned long total_ms) {
+    Rectangle dest_rect = {
         player->position.x + player->sprite_offset.x,
         player->position.y + player->sprite_offset.y,
         player->bb_size,
         player->bb_size,
     };
 
-    DrawTexturePro(player->texture, get_player_sprite(player, total_ms), dest, (Vector2) { 0.0, 0.0 }, 0, WHITE);
-    
-    if (get_config_ptr()->render_colliders) {
-
-
-        DrawRectangleLinesEx(get_player_rect(player), 2.0f, WHITE);
-
-        Rectangle** rects = get_tiles_around_player(player, world->col_map);
-        render_collision_tiles(rects);
-        free(rects);
-    }
+    DrawTexturePro(player->texture, get_player_sprite(player, total_ms), dest_rect, (Vector2) { 0.0, 0.0 }, 0, WHITE);
 }
 
 
@@ -98,7 +88,7 @@ void player_update_velocity_by_input(player_t* player) {
     player->velocity.y = player->velocity.y < -player->speed_cap ? -player->speed_cap : player->velocity.y;
 }
 
-Rectangle** get_tiles_around_player(player_t* player, tilemap_t* col_map) {
+Rectangle** get_col_tiles_around_player(player_t* player, tilemap_t* col_map) {
     const int ts = 16; // tile size
     // tilemap at position (0,0)
     
@@ -109,7 +99,6 @@ Rectangle** get_tiles_around_player(player_t* player, tilemap_t* col_map) {
         if (!close_walls[i]) { printf("[!] calloc failed"); exit(1); }
     }
 
-
     Vector2 offsets[3][3] = {
         {(Vector2){-1.0f, -1.0f}, (Vector2){0.0f, -1.0f}, (Vector2){1.0f, -1.0f}},
         {(Vector2){-1.0f, 0.0f}, (Vector2){0.0f, 0.0f}, (Vector2){1.0f, 0.0f}},
@@ -118,26 +107,30 @@ Rectangle** get_tiles_around_player(player_t* player, tilemap_t* col_map) {
 
     for (int x = 0; x<3; x++) {
         for (int y = 0; y<3; y++) {
+            // get player center
             int pmx = player->position.x + 8;
             int pmy = player->position.y + 8;
-
+            
+            // calculate near tiles
             int tile_x = pmx/(int)ts + offsets[y][x].x;
             int tile_y = pmy/(int)ts + offsets[y][x].y;
             
-            // only let out of bound or solid tiles create collision
-            if (get_tile_at(col_map, tile_x, tile_y) == -1) {
-                continue;
+            // get tile id
+            int collider_type = get_tile_at(col_map, tile_x, tile_y);
+
+            if (collider_type == -1) {
+                continue; // No collision (air)
             }
+            
+            // get subrect by tile id 
+            Rectangle sub_rect = get_collision_sub_rect(collider_type, ts);
 
-            Rectangle rect = {
-                .x = tile_x * ts,
-                .y = tile_y * ts,
-                .width = ts,
-                .height = ts,
-            };
-
-            // printf("close tile at [%d|%d]\n", tile_x, tile_y);
-            close_walls[y][x] = rect; 
+            // move subrect to tile position
+            sub_rect.x += tile_x * ts;
+            sub_rect.y += tile_y * ts;
+            
+            // save subrect to return array
+            close_walls[y][x] = sub_rect; 
         }
     }
 
@@ -149,9 +142,8 @@ void player_move_by_velocity(player_t* player) {
 }
 
 int player_move_and_collide(player_t* player, world_t* world) {
-    // breaks at 4FPS!!!
 
-    Rectangle** rects = get_tiles_around_player(player, world->col_map);
+    Rectangle** rects = get_col_tiles_around_player(player, world->col_map);
 
     int col = 0; // 0 = no col
                  // 1 = horizontal 
@@ -186,7 +178,7 @@ int player_move_and_collide(player_t* player, world_t* world) {
                 else if (offset.x < 0) {
                     // collision on the left -> snap to right edge
 
-                    player->position.x = rects[y][x].x + ts - p_ws.x ;
+                    player->position.x = rects[y][x].x + rects[y][x].width - p_ws.x ;
                 }
             }
         }
@@ -208,7 +200,7 @@ int player_move_and_collide(player_t* player, world_t* world) {
                     player->position.y = rects[y][x].y - player->bb_size + p_ws.y;
                 } else if (offset.y <0) {
                     // collision on the top -> snap to bottom edge
-                    player->position.y = rects[y][x].y + ts - p_ws.y;
+                    player->position.y = rects[y][x].y + rects[y][x].height - p_ws.y;
                 }
             }
         }
