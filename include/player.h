@@ -16,6 +16,9 @@ typedef struct Player {
     float anim_speed;
     Texture2D texture;
     bool flipped;
+    int bb_size; // bounding box
+    Vector2 sprite_size;
+    Vector2 sprite_offset;
 
     // physics
     Vector2 position;

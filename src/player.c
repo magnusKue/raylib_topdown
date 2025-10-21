@@ -9,13 +9,14 @@
 #include "../include/world.h"
 #include "../include/config.h"
 
-#define SP_WIDTH 16
-
 void init_player(player_t* player) {
     // visual
     player->state = IDLE;
     player->anim_speed = 0.008f;
     player->flipped = false;
+    player->bb_size = 16;
+    player->sprite_size = (Vector2) { 8, 8 }; // Bug, collision only works with some values
+    player->sprite_offset = (Vector2) { 0, -3 }; // Bug, collision only works with some values
 
     player->texture = LoadTexture("assets/sprites/player.png");
 
@@ -37,7 +38,7 @@ void init_player(player_t* player) {
 
 Rectangle get_player_sprite(player_t* player, unsigned long total_ms) {
     int frame = (int)(total_ms*player->anim_speed) % 4;
-    int size = SP_WIDTH; 
+    int size = player->bb_size; 
     
     int rect_width = size * (player->flipped ? -1 : 1);
     Rectangle rect = {
@@ -51,14 +52,17 @@ Rectangle get_player_sprite(player_t* player, unsigned long total_ms) {
 
 void render_player(player_t* player, unsigned long total_ms, world_t* world) {
     Rectangle dest = {
-        player->position.x,
-        player->position.y,
-        SP_WIDTH,
-        SP_WIDTH,
+        player->position.x + player->sprite_offset.x,
+        player->position.y + player->sprite_offset.y,
+        player->bb_size,
+        player->bb_size,
     };
+
     DrawTexturePro(player->texture, get_player_sprite(player, total_ms), dest, (Vector2) { 0.0, 0.0 }, 0, WHITE);
     
     if (get_config_ptr()->render_colliders) {
+
+
         DrawRectangleLinesEx(get_player_rect(player), 2.0f, WHITE);
 
         Rectangle** rects = get_tiles_around_player(player, world->col_map);
@@ -155,9 +159,14 @@ int player_move_and_collide(player_t* player, world_t* world) {
                  // 3 = both 
 
     int ts = 16; // tile size
-    int player_size = 16;
     Vector2 offset = Vector2Scale(player->velocity, GetFrameTime());
     
+    Vector2 p_ws = {
+        // player sprite whitespace
+        0.5f*(player->bb_size - player->sprite_size.x),
+        0.5f*(player->bb_size - player->sprite_size.y),
+    };
+
     // HORIZONTAL COMPONENT ----------
     player->position.x  += offset.x;
 
@@ -171,10 +180,13 @@ int player_move_and_collide(player_t* player, world_t* world) {
                 // collision
                 if (offset.x > 0) {
                     // collision on the right -> snap to left edge
-                    player->position.x = rects[y][x].x - player_size;
-                } else if (offset.x <0) {
+                    
+                    player->position.x = rects[y][x].x - player->bb_size + p_ws.x;
+                } 
+                else if (offset.x < 0) {
                     // collision on the left -> snap to right edge
-                    player->position.x = rects[y][x].x + ts;
+
+                    player->position.x = rects[y][x].x + ts - p_ws.x ;
                 }
             }
         }
@@ -193,10 +205,10 @@ int player_move_and_collide(player_t* player, world_t* world) {
                 // collision
                 if (offset.y > 0) {
                     // collision on the bottom -> snap to top edge
-                    player->position.y = rects[y][x].y - player_size;
+                    player->position.y = rects[y][x].y - player->bb_size + p_ws.y;
                 } else if (offset.y <0) {
                     // collision on the top -> snap to bottom edge
-                    player->position.y = rects[y][x].y + ts;
+                    player->position.y = rects[y][x].y + ts - p_ws.y;
                 }
             }
         }
@@ -232,18 +244,18 @@ void player_update_state(player_t* player) {
 
 
 Rectangle get_player_rect(player_t* player) {
-    int player_size = 16;
+    int v_offset = 0.5f*(player->bb_size - player->sprite_size.y);
+    int h_offset = 0.5f*(player->bb_size - player->sprite_size.x);
+
     return (Rectangle) {
-        .x = player->position.x,
-        .y = player->position.y,
-        .width = player_size,
-        .height = player_size,
+        .x = player->position.x + v_offset,
+        .y = player->position.y + h_offset,
+        .width = player->sprite_size.x,
+        .height = player->sprite_size.y,
     };
 }
 
 void update_player(player_t* player, world_t* world) {
-    // printf("PLAYER POS: %f %f\n", player->position.x, player->position.y);
-    // printf("PLAYER VEL: %f %f\n", player->velocity.x, player->velocity.y);
 
     player_update_velocity_by_input(player);
     if (get_config_ptr()->player_collision) {

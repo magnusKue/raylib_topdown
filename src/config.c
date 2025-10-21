@@ -3,8 +3,8 @@
 // Initialize debug_mode to false or true as needed
 config_t global_config = {
     // DEBUG
-    .render_colliders = false,
-    .player_collision = false,
+    .render_colliders = true,
+    .player_collision = true,
 };
 
 config_t* get_config_ptr(void) {

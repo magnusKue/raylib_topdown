@@ -20,7 +20,7 @@ int start_game() {
     // Initialize components
     init_window("Game", /*RESOLUTION:*/1920/2, 1200/2, /*FPS:*/600);
     init_player(&player);
-    init_camera(&camera, /*ZOOM*/ 3.0);
+    init_camera(&camera, /*ZOOM*/ 5.0);
     init_world(&world, "assets/levels/test_collision.csv");
     printf("[!] Initialized successfully!\n\n");
     
