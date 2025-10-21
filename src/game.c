@@ -30,7 +30,7 @@ int start_game() {
     printf("[!] Loaded tilesets successfully!\n\n");
 
     tilemap_t* tilemap_tips   = load_tilemap("assets/levels/test_tips.csv");
-    tilemap_t* tilemap_objects   = load_tilemap("assets/levels/test_object.csv");
+    tilemap_t* tilemap_objects   = load_tilemap("assets/levels/test_objects.csv");
     tilemap_t* tilemap_ground    = load_tilemap("assets/levels/test_ground.csv");
     printf("\n[!] Loaded tilemaps successfully!\n\n");
 

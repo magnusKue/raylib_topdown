@@ -45,7 +45,7 @@
         "tilesets/sunnyside_world.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 0.9287,
-            "scaleInEditor": 1
+            "scaleInEditor": 3.5389
         }
     },
     "last.exportedFilePath": "/home/magnus/code/c/projects/raylib_topdown/assets/levels",
@@ -61,11 +61,11 @@
     ],
     "project": "test.tiled-project",
     "recentFiles": [
+        "tilesets/sunnyside_world.tsx",
         "tilesets/collision.tsx",
         "tilesets/main.tsx",
         "sunny_map.tmx",
         "map01.tmx",
-        "tilesets/sunnyside_world.tsx",
         "sunnyside_world.tsx",
         "main.tsx"
     ],

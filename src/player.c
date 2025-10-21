@@ -61,7 +61,6 @@ void render_player(player_t* player, unsigned long total_ms) {
     DrawTexturePro(player->texture, get_player_sprite(player, total_ms), dest_rect, (Vector2) { 0.0, 0.0 }, 0, WHITE);
 }
 
-
 void player_update_velocity_by_input(player_t* player) {
     float frameTime = GetFrameTime();
 
@@ -172,12 +171,12 @@ int player_move_and_collide(player_t* player, world_t* world) {
                 // collision
                 if (offset.x > 0) {
                     // collision on the right -> snap to left edge
-                    
+                    player->velocity.x = 0;
                     player->position.x = rects[y][x].x - player->bb_size + p_ws.x;
                 } 
                 else if (offset.x < 0) {
                     // collision on the left -> snap to right edge
-
+                    player->velocity.x = 0;
                     player->position.x = rects[y][x].x + rects[y][x].width - p_ws.x ;
                 }
             }
@@ -197,9 +196,11 @@ int player_move_and_collide(player_t* player, world_t* world) {
                 // collision
                 if (offset.y > 0) {
                     // collision on the bottom -> snap to top edge
+                    player->velocity.y = 0;
                     player->position.y = rects[y][x].y - player->bb_size + p_ws.y;
                 } else if (offset.y <0) {
                     // collision on the top -> snap to bottom edge
+                    player->velocity.y = 0;
                     player->position.y = rects[y][x].y + rects[y][x].height - p_ws.y;
                 }
             }
@@ -218,7 +219,6 @@ void player_apply_friction(player_t* player) {
     // player->velocity = Vector2Scale(player->velocity, player->friction);
 }
 
-
 void player_face_moving_dir(player_t* player) {
     if (!player->velocity.x) { return; } 
     player->flipped = player->velocity.x < 0;
@@ -233,7 +233,6 @@ void player_update_state(player_t* player) {
         player->state = IDLE;
     }
 }
-
 
 Rectangle get_player_rect(player_t* player) {
     int v_offset = 0.5f*(player->bb_size - player->sprite_size.y);
