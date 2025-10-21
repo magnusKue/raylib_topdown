@@ -28,6 +28,7 @@ int start_game() {
     tileset_t* tileset_collision = load_tileset(16, "assets/tilesheets/collision_tilesheet.png");
     printf("[!] Loaded tilesets successfully!\n\n");
 
+    tilemap_t* tilemap_tips   = load_tilemap("assets/levels/test_tips.csv");
     tilemap_t* tilemap_objects   = load_tilemap("assets/levels/test_object.csv");
     tilemap_t* tilemap_ground    = load_tilemap("assets/levels/test_ground.csv");
     printf("\n[!] Loaded tilemaps successfully!\n\n");
@@ -46,6 +47,8 @@ int start_game() {
             render_tilemap(tilemap_objects, tileset_sunnyside);
 
             render_player(&player, (int)time_us/1000, &world);
+
+            render_tilemap(tilemap_tips, tileset_sunnyside);
 
         render_to_window(&camera);
 
