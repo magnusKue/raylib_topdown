@@ -6,6 +6,7 @@
 #include "../include/camera.h"
 #include "../include/tilemap.h"
 #include "../include/world.h"
+#include "../include/config.h"
 
 int start_game() {
     unsigned long time_us = 0; // time in µs
@@ -36,12 +37,14 @@ int start_game() {
         update_player(&player, &world);
         update_camera(&camera, &player);
 
+        if (IsKeyPressed(KEY_TAB)) { toggle_debug_mode(); }
+
         // RENDER
         start_render(&camera);
             render_tilemap(tilemap_ground, tileset_sunnyside);
             render_tilemap(tilemap_objects, tileset_sunnyside);
 
-            render_player(&player, (int)time_us/1000);
+            render_player(&player, (int)time_us/1000, &world);
 
         render_to_window(&camera);
 

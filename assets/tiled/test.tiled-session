@@ -17,8 +17,8 @@
             "scale": 0.9282291666666665,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 311.88418808214567,
-                "y": 176.14184715520148
+                "x": 311.3455279991023,
+                "y": 176.14184715520145
             }
         },
         "sunny_map.tmx": {
@@ -55,9 +55,9 @@
     ],
     "project": "test.tiled-project",
     "recentFiles": [
+        "tilesets/collision.tsx",
         "sunny_map.tmx",
         "tilesets/sunnyside_world.tsx",
-        "tilesets/collision.tsx",
         "sunnyside_world.tsx",
         "main.tsx",
         "map01.tmx"

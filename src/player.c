@@ -1,9 +1,13 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
 #include "../include/player.h"
+#include "../include/tilemap.h"
 #include "../include/world.h"
+#include "../include/config.h"
 
 #define SP_WIDTH 16
 
@@ -45,7 +49,7 @@ Rectangle get_player_sprite(player_t* player, unsigned long total_ms) {
     return rect;
 }
 
-void render_player(player_t* player, unsigned long total_ms) {
+void render_player(player_t* player, unsigned long total_ms, world_t* world) {
     Rectangle dest = {
         player->position.x,
         player->position.y,
@@ -53,6 +57,14 @@ void render_player(player_t* player, unsigned long total_ms) {
         SP_WIDTH,
     };
     DrawTexturePro(player->texture, get_player_sprite(player, total_ms), dest, (Vector2) { 0.0, 0.0 }, 0, WHITE);
+    
+    if (get_debug_mode()) {
+        DrawRectangleLinesEx(get_player_rect(player), 2.0f, WHITE);
+
+        Rectangle** rects = get_tiles_around_player(player, world->col_map);
+        render_collision_tiles(rects);
+        free(rects);
+    }
 }
 
 
@@ -82,8 +94,118 @@ void player_update_velocity_by_input(player_t* player) {
     player->velocity.y = player->velocity.y < -player->speed_cap ? -player->speed_cap : player->velocity.y;
 }
 
+Rectangle** get_tiles_around_player(player_t* player, tilemap_t* col_map) {
+    const int ts = 16; // tile size
+    // tilemap at position (0,0)
+    
+    Rectangle** close_walls = malloc(sizeof(Rectangle*) * 3); 
+    if (!close_walls) { printf("[!] malloc failed"); exit(1); }
+    for (int i = 0; i < 3; i++) {
+        close_walls[i] = calloc((size_t)3, sizeof(Rectangle)); 
+        if (!close_walls[i]) { printf("[!] calloc failed"); exit(1); }
+    }
+
+
+    Vector2 offsets[3][3] = {
+        {(Vector2){-1.0f, -1.0f}, (Vector2){0.0f, -1.0f}, (Vector2){1.0f, -1.0f}},
+        {(Vector2){-1.0f, 0.0f}, (Vector2){0.0f, 0.0f}, (Vector2){1.0f, 0.0f}},
+        {(Vector2){-1.0f, 1.0f}, (Vector2){0.0f, 1.0f}, (Vector2){1.0f, 1.0f}},
+    };
+
+    for (int x = 0; x<3; x++) {
+        for (int y = 0; y<3; y++) {
+            int pmx = player->position.x + 8;
+            int pmy = player->position.y + 8;
+
+            int tile_x = pmx/(int)ts + offsets[y][x].x;
+            int tile_y = pmy/(int)ts + offsets[y][x].y;
+            
+            // only let out of bound or solid tiles create collision
+            if (get_tile_at(col_map, tile_x, tile_y) == -1) {
+                continue;
+            }
+
+            Rectangle rect = {
+                .x = tile_x * ts,
+                .y = tile_y * ts,
+                .width = ts,
+                .height = ts,
+            };
+
+            // printf("close tile at [%d|%d]\n", tile_x, tile_y);
+            close_walls[y][x] = rect; 
+        }
+    }
+
+    return close_walls;
+}
+
 void player_move_by_velocity(player_t* player) {
     player->position = Vector2Add(player->position, Vector2Scale(player->velocity, GetFrameTime()));
+}
+
+int player_move_and_collide(player_t* player, world_t* world) {
+    // breaks at 4FPS!!!
+
+    Rectangle** rects = get_tiles_around_player(player, world->col_map);
+
+    int col = 0; // 0 = no col
+                 // 1 = horizontal 
+                 // 2 = vertical 
+                 // 3 = both 
+
+    int ts = 16; // tile size
+    int player_size = 16;
+    Vector2 offset = Vector2Scale(player->velocity, GetFrameTime());
+    
+    // HORIZONTAL COMPONENT ----------
+    player->position.x  += offset.x;
+
+    // check collision
+    float xpos = player->position.x;
+    for (int y = 0; y < 3; y++) {
+        for (int x = 0; x < 3; x++) {
+            if (CheckCollisionRecs(rects[y][x], get_player_rect(player))) {
+                // printf("Horizontal Collision \n");
+                col += 1;
+                // collision
+                if (offset.x > 0) {
+                    // collision on the right -> snap to left edge
+                    player->position.x = rects[y][x].x - player_size;
+                } else if (offset.x <0) {
+                    // collision on the left -> snap to right edge
+                    player->position.x = rects[y][x].x + ts;
+                }
+            }
+        }
+    }
+
+    // VERTICAL COMPONENT --------
+    player->position.y  += offset.y;
+
+    // check collision
+    float ypos = player->position.y;
+    for (int y = 0; y < 3; y++) {
+        for (int x = 0; x < 3; x++) {
+            if (CheckCollisionRecs(rects[y][x], get_player_rect(player))) {
+                // printf("Vertical Collision \n");
+                col += 2;
+                // collision
+                if (offset.y > 0) {
+                    // collision on the bottom -> snap to top edge
+                    player->position.y = rects[y][x].y - player_size;
+                } else if (offset.y <0) {
+                    // collision on the top -> snap to bottom edge
+                    player->position.y = rects[y][x].y + ts;
+                }
+            }
+        }
+    }
+
+
+    // Finish up
+    free(rects);
+    return col;
 }
 
 void player_apply_friction(player_t* player) {
@@ -108,12 +230,24 @@ void player_update_state(player_t* player) {
     }
 }
 
+
+Rectangle get_player_rect(player_t* player) {
+    int player_size = 16;
+    return (Rectangle) {
+        .x = player->position.x,
+        .y = player->position.y,
+        .width = player_size,
+        .height = player_size,
+    };
+}
+
 void update_player(player_t* player, world_t* world) {
     // printf("PLAYER POS: %f %f\n", player->position.x, player->position.y);
     // printf("PLAYER VEL: %f %f\n", player->velocity.x, player->velocity.y);
 
     player_update_velocity_by_input(player);
-    player_move_by_velocity(player);
+    // player_move_by_velocity(player);
+    player_move_and_collide(player, world);
     player_face_moving_dir(player);
     player_update_state(player);
     player_apply_friction(player);

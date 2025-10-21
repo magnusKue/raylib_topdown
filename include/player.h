@@ -1,4 +1,4 @@
-#pragma once
+# pragma once
 
 #include <raylib.h>
 
@@ -27,5 +27,8 @@ typedef struct Player {
 
 void init_player(player_t* player);
 void update_player(player_t* player, world_t* world);
-void render_player(player_t* player, unsigned long total_ms);
+void render_player(player_t* player, unsigned long total_ms, world_t* world);
+
+Rectangle get_player_rect(player_t* player);
+Rectangle** get_tiles_around_player(player_t* player, tilemap_t* col_map);
 

@@ -1,4 +1,4 @@
-SRC = src/main.c src/player.c src/window.c src/camera.c src/tilemap.c src/csvparser.c src/world.c src/game.c
+SRC = src/main.c src/player.c src/window.c src/camera.c src/tilemap.c src/csvparser.c src/world.c src/game.c src/config.c
 TARGET = target
 LIB = -lraylib -lm -lpthread -ldl -lrt -lX11
 all: $(TARGET)

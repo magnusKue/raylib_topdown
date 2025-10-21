@@ -4,6 +4,7 @@
 #include "../include/camera.h"
 #include "../include/player.h"
 #include "../include/window.h"
+#include "../include/config.h"
 
 void init_window(char* title, int width, int height, int maxFps) {
     InitWindow(width, height, title);
@@ -23,9 +24,11 @@ void render_to_window(camera_t* camera) {
     EndMode2D();
 
     // Draw FPS
-    char fps[12];
-    sprintf(fps, "%d", GetFPS());
-    DrawText(fps, 10.0, 10.0, /*FNT SIZE*/16.0, WHITE);
-
+    
+    if (get_debug_mode()) {
+        char fps[12];
+        sprintf(fps, "%d", GetFPS());
+        DrawText(fps, 10.0, 10.0, /*FNT SIZE*/24.0, WHITE);
+    }
     EndDrawing();
 }

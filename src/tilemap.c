@@ -100,7 +100,23 @@ void render_tileset(tileset_t* ts) {
 void render_tilemap(tilemap_t* tmap, tileset_t* tset) {
     for (int r = 0; r < tmap->rows; r++) {
         for (int x = 0; x < tmap->columns; x++) {
-            render_tile((int)tmap->tmap[r][x], tset, x*16, r*16);
+            render_tile((int)tmap->tmap[r][x], tset, x*tset->tile_size, r*tset->tile_size);
+        }
+    }
+}
+
+int get_tile_at(tilemap_t* map, int x, int y) {
+    if (x < 0 || y < 0 || x > map->rows-1 || y > map->columns-1) {
+        // printf("[!] Out of bounds check for tile at [%d|%d]\n", x, y);
+        return 0;
+    }
+    return (int)map->tmap[y][x];
+}
+
+void render_collision_tiles(Rectangle** tile_rects) {
+    for (int x = 0; x<3; x++) {
+        for (int y = 0; y<3; y++) {
+            DrawRectangleLinesEx(tile_rects[y][x], 2, RED);
         }
     }
 }

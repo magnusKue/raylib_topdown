@@ -33,5 +33,7 @@ tileset_t* load_tileset(int tile_size, char* tile_sheet_path);
 void render_tile(int index, tileset_t* ts, int x, int y);
 void render_tileset(tileset_t* ts);
 void render_tilemap(tilemap_t* tmap, tileset_t* tset);
+int get_tile_at(tilemap_t* map, int x, int y);
+void render_collision_tiles(Rectangle** tile_rects);
 
 tilemap_t* load_tilemap(char* map_path);
