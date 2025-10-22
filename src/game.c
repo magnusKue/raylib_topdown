@@ -39,18 +39,18 @@ int start_game() {
         update_player(&player, &world);
         update_camera(&camera, &player);
 
-        if (IsKeyPressed(KEY_TAB)) { get_config_ptr()->render_colliders ^= 1;  }
-        if (IsKeyPressed(KEY_F)) { get_config_ptr()->player_collision ^= 1;  }
+        read_debug_input();
 
         // RENDER
         start_render(&camera);
-            render_tilemap(tilemap_ground, tileset_sunnyside);
-            render_tilemap(tilemap_objects, tileset_sunnyside);
+            if (get_config_ptr()->render_ground) { render_tilemap(tilemap_ground, tileset_sunnyside); }
+            if (get_config_ptr()->render_objects) { render_tilemap(tilemap_objects, tileset_sunnyside); }
 
             render_player(&player, (int)time_us/1000);
 
-            render_tilemap(tilemap_tips, tileset_sunnyside);
-            
+            if (get_config_ptr()->render_tips) { render_tilemap(tilemap_tips, tileset_sunnyside); }
+            if (get_config_ptr()->render_col_map) { render_tilemap(world.col_map, tileset_collision); }
+
             render_colliders(&player, &world);
 
         render_to_window(&camera);

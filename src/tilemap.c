@@ -184,7 +184,7 @@ Rectangle get_collision_sub_rect(int tiletype, int bb) {
 void render_collision_tiles(Rectangle** tile_rects) {
     for (int x = 0; x<3; x++) {
         for (int y = 0; y<3; y++) {
-            DrawRectangleLinesEx(tile_rects[y][x], 2, RED);
+            DrawRectangleLinesEx(tile_rects[y][x], 2, GRAY);
         }
     }
 }

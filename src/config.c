@@ -5,6 +5,12 @@ config_t global_config = {
     // DEBUG
     .render_colliders = true,
     .player_collision = true,
+
+    // layers
+    .render_ground = true,
+    .render_objects = true,
+    .render_tips = true,
+    .render_col_map = true,
 };
 
 config_t* get_config_ptr(void) {
