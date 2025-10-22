@@ -16,7 +16,7 @@ void init_player(player_t* player) {
     player->flipped = false;
     player->bb_size = 16;
     player->sprite_size = (Vector2) { 8, 8 }; // Bug, collision only works with some values
-    player->sprite_offset = (Vector2) { 0, -5 }; // Bug, collision only works with some values
+    player->sprite_offset = (Vector2) { -1, -5 }; // Bug, collision only works with some values
 
     player->texture = LoadTexture("assets/sprites/player.png");
 
@@ -51,9 +51,15 @@ Rectangle get_player_sprite(player_t* player, unsigned long total_ms) {
 }
 
 void render_player(player_t* player, unsigned long total_ms) {
+
+    Vector2 offset = {
+        .x = player->sprite_offset.x * (player->flipped?-1:1),
+        .y = player->sprite_offset.y,
+    };
+
     Rectangle dest_rect = {
-        player->position.x + player->sprite_offset.x,
-        player->position.y + player->sprite_offset.y,
+        player->position.x + offset.x,
+        player->position.y + offset.y,
         player->bb_size,
         player->bb_size,
     };
@@ -107,8 +113,8 @@ Rectangle** get_col_tiles_around_player(player_t* player, tilemap_t* col_map) {
     for (int x = 0; x<3; x++) {
         for (int y = 0; y<3; y++) {
             // get player center
-            int pmx = player->position.x + 8;
-            int pmy = player->position.y + 8;
+            int pmx = player->position.x + (0.5*player->bb_size);
+            int pmy = player->position.y + (0.5*player->bb_size);
             
             // calculate near tiles
             int tile_x = pmx/(int)ts + offsets[y][x].x;

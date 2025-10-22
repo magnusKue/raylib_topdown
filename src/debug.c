@@ -7,7 +7,8 @@
 void  render_colliders(player_t* player, world_t* world) {
    if (get_config_ptr()->render_colliders) {
       // PLAYER
-      DrawRectangleLinesEx(get_player_rect(player), 2.0f, BLUE);
+      Color col = get_config_ptr()->player_collision ? RED : BLUE;
+      DrawRectangleLinesEx(get_player_rect(player), 2.0f, col);
       // TILEMAP
       Rectangle** rects = get_col_tiles_around_player(player, world->col_map);
       render_collision_tiles(rects);
@@ -22,5 +23,4 @@ void read_debug_input() {
         if (IsKeyPressed(KEY_ONE)) { get_config_ptr()->render_ground ^= 1;  }
         if (IsKeyPressed(KEY_TWO)) { get_config_ptr()->render_objects ^= 1;  }
         if (IsKeyPressed(KEY_THREE)) { get_config_ptr()->render_tips ^= 1;  }
-        if (IsKeyPressed(KEY_FOUR)) { get_config_ptr()->render_col_map ^= 1;  }
 }

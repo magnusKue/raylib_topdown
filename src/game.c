@@ -49,7 +49,7 @@ int start_game() {
             render_player(&player, (int)time_us/1000);
 
             if (get_config_ptr()->render_tips) { render_tilemap(tilemap_tips, tileset_sunnyside); }
-            if (get_config_ptr()->render_col_map) { render_tilemap(world.col_map, tileset_collision); }
+            if (get_config_ptr()->render_colliders) { render_tilemap(world.col_map, tileset_collision); }
 
             render_colliders(&player, &world);
 

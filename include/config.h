@@ -8,7 +8,6 @@ typedef struct Config {
     bool render_ground;
     bool render_objects;
     bool render_tips;
-    bool render_col_map;
 } config_t;
 
 extern config_t global_config;
