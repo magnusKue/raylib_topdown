@@ -12,8 +12,6 @@
 int start_game() {
     unsigned long time_us = 0; // time in µs
     
-    // create_tile
-
     player_t player;
     camera_t camera;
     world_t world;
@@ -37,7 +35,7 @@ int start_game() {
     while (!WindowShouldClose()) {
         // UPDATE
         update_player(&player, &world);
-        update_camera(&camera, &player);
+        update_camera(&camera, &(player.entity));
 
         read_debug_input();
 

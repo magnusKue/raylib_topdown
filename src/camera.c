@@ -1,7 +1,7 @@
 #include <raylib.h>
 #include <raymath.h>
 
-#include "../include/player.h"
+#include "../include/entity.h"
 #include "../include/camera.h"
 
 void init_camera(camera_t* camera, float zoom) {
@@ -12,8 +12,8 @@ void init_camera(camera_t* camera, float zoom) {
     camera->cam.zoom = zoom;
 }
 
-void update_camera(camera_t* camera, player_t* player) {
-    target_player(camera, player);
+void update_camera(camera_t* camera, entity_t* entity) {
+    target_entity(camera, entity);
     update_offset(camera);
 }
 
@@ -25,8 +25,7 @@ void update_offset(camera_t* camera) {
     camera->cam.offset = offset;
 }
 
-void target_player(camera_t* camera, player_t* player) {
-    int player_size = 16;
-    Vector2 target = Vector2AddValue(player->position, 0.5*player_size);
+void target_entity(camera_t* camera, entity_t* entity) {
+    Vector2 target = Vector2AddValue(entity->position, 0.5*entity->bb_size);
     camera->cam.target = target;
 }

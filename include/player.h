@@ -4,6 +4,7 @@
 
 #include "../include/world.h"
 #include "../include/tilemap.h"
+#include "../include/entity.h"
 
 typedef enum State {
     // index == spritesheet row
@@ -16,23 +17,10 @@ typedef struct Player {
     state_t state;
     float anim_speed;
     Texture2D texture;
-    bool flipped;
-    int bb_size; // bounding box
-    Vector2 sprite_size;
-    Vector2 sprite_offset;
 
-    // physics
-    Vector2 position;
-    Vector2 velocity;
-    float acceleration;
-    float friction;
-    float speed_cap;
+    entity_t entity;
 } player_t;
 
 void init_player(player_t* player);
 void update_player(player_t* player, world_t* world);
 void render_player(player_t* player, unsigned long total_ms);
-
-Rectangle get_player_rect(player_t* player);
-Rectangle** get_col_tiles_around_player(player_t* player, tilemap_t* col_map);
-

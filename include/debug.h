@@ -6,4 +6,4 @@
 
 // Debug stuff
 void render_colliders(player_t* player, world_t* world);
-void read_debug_input();
+void read_debug_input(void);
