@@ -4,10 +4,12 @@
 
 # include "../include/world.h"
 # include "../include/tilemap.h"
+# include "../include/anim.h"
 
 typedef struct Entity {
     // visual
-    bool flipped;
+    animator_t anim;
+
     int bb_size; // bounding box
     Vector2 sprite_size;
     Vector2 sprite_offset;
@@ -15,6 +17,7 @@ typedef struct Entity {
     // Physics
     Vector2 position;
     Vector2 velocity;
+
     float acceleration;
     float friction;
     float speed_cap;

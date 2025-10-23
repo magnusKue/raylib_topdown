@@ -32,8 +32,8 @@ Rectangle** get_col_tiles_around_entity(entity_t* entity, tilemap_t* col_map) {
             int emy = entity->position.y + (0.5*entity->bb_size);
             
             // calculate near tiles
-            int tile_x = emx/(int)ts + offsets[y][x].x;
-            int tile_y = emy/(int)ts + offsets[y][x].y;
+            int tile_x = emx/ts + (int)offsets[y][x].x;
+            int tile_y = emy/ts + (int)offsets[y][x].y;
             
             // get tile id
             int collider_type = get_tile_at(col_map, tile_x, tile_y);
@@ -142,7 +142,7 @@ void entity_apply_friction(entity_t* entity) {
 
 void entity_face_moving_dir(entity_t* entity) {
     if (!entity->velocity.x) { return; } 
-    entity->flipped = entity->velocity.x < 0;
+    entity->anim.flipped = entity->velocity.x < 0;
     return;
 }
 

@@ -1,24 +1,27 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 
 #include "../include/player.h"
-#include "../include/tilemap.h"
 #include "../include/world.h"
 #include "../include/config.h"
 #include "../include/entity.h"
+#include "../include/anim.h"
 
 void init_player(player_t* player) {
     // visual
-    player->state = IDLE;
-    player->anim_speed = 0.008f;
-    player->texture = LoadTexture("assets/sprites/player.png");
-    if (!IsTextureValid(player->texture)) {  printf("WARINING: Player texture loading failed"); return; }
+    
+    animator_t animt = {
+        .texture = LoadTexture("assets/sprites/player.png"),
+        .anim_speed = 0.008f,
+        .flipped = false,
+        .state = (int)IDLE,
+        .frame_count = 4,
+    };
+    if (!IsTextureValid(animt.texture)) {  printf("WARINING: Player texture loading failed"); return; }
 
     player->entity = (entity_t){
-        .flipped = false,
+        .anim = animt,
         .bb_size = 16,
         .sprite_size = (Vector2) { 8, 8 }, // Bug, collision only works with some values
         .sprite_offset = (Vector2) { -1, -5 }, // X axis relative to player movement direction 
@@ -37,15 +40,15 @@ void init_player(player_t* player) {
     };
 }
 
-
 Rectangle get_player_sprite(player_t* player, unsigned long total_ms) {
-    int frame = (int)(total_ms*player->anim_speed) % 4;
+
+    int frame = (int)(total_ms*player->entity.anim.anim_speed) % 4;
     int size = player->entity.bb_size; 
 
-    int rect_width = size * (player->entity.flipped ? -1 : 1);
+    int rect_width = size * (player->entity.anim.flipped ? -1 : 1);
     Rectangle rect = {
         frame*size,
-        (int)player->state * size,
+        (int)player->entity.anim.state * size,
         rect_width, 
         size,
     };
@@ -56,7 +59,7 @@ void render_player(player_t* player, unsigned long total_ms) {
     entity_t* ply_ent = &(player->entity);
 
     Vector2 offset = {
-        .x = ply_ent->sprite_offset.x * (ply_ent->flipped?-1:1),
+        .x = ply_ent->sprite_offset.x * (ply_ent->anim.flipped?-1:1),
         .y = ply_ent->sprite_offset.y,
     };
 
@@ -67,7 +70,9 @@ void render_player(player_t* player, unsigned long total_ms) {
         ply_ent->bb_size,
     };
 
-    DrawTexturePro(player->texture, get_player_sprite(player, total_ms), dest_rect, (Vector2) { 0.0, 0.0 }, 0, WHITE);
+    Rectangle source_rect = get_animation_frame(&(player->entity));
+
+    DrawTexturePro(player->entity.anim.texture, source_rect, dest_rect, (Vector2) { 0.0, 0.0 }, 0, WHITE);
 }
 
 void player_update_velocity_by_input(player_t* player) {
@@ -98,10 +103,10 @@ void player_update_velocity_by_input(player_t* player) {
 
 void player_update_state(player_t* player) {
     if (Vector2Length(player->entity.velocity) > 10.0) {
-        player->state = RUNNING;
+        play_animation(&(player->entity.anim), (int)RUNNING);
     }
     else {
-        player->state = IDLE;
+        play_animation(&(player->entity.anim), (int)IDLE);
     }
 }
 

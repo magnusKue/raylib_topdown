@@ -1,0 +1,146 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/main.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/main.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/player.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/player.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/window.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/window.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/camera.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/camera.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/tilemap.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/tilemap.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/csvparser.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/csvparser.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/world.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/world.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/game.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/game.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/config.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/config.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/debug.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/debug.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/entity.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/entity.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/anim.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/anim.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  }
+]

@@ -14,9 +14,7 @@ typedef enum State {
 
 typedef struct Player {
     // visual
-    state_t state;
     float anim_speed;
-    Texture2D texture;
 
     entity_t entity;
 } player_t;
