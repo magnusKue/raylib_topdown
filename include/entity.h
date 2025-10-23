@@ -1,6 +1,7 @@
 # pragma once 
 
 # include <raylib.h>
+# include <raylib.h>
 
 # include "../include/world.h"
 # include "../include/tilemap.h"

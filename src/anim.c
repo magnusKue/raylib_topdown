@@ -19,7 +19,7 @@ Rectangle get_animation_frame(entity_t* entity) {
         size,
     };
 
-    printf("%f|%f player: \n", rect.x, rect.y);
+    // printf("%f|%f player: \n", rect.x, rect.y);
     return rect;
 }
 
