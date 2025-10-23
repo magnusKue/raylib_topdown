@@ -1,4 +1,5 @@
 # include <assert.h>
+#include <stdio.h>
 
 # include "../include/enemy.h"
 # include "../include/player.h"
