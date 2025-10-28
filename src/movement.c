@@ -13,16 +13,15 @@
 
 
 int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
-    if (!enemy->path.nodes || enemy->path.len < 1 || enemy->path.index == -1 || enemy->path.finished) {
-        // no path calcutated
-        return 1;
+    if (enemy->path.finished) {
+        // or path finished already
+        // printf("Angriff!");
+        return 0;
     }
 
-    if (enemy->path.finished) {
-        // printf("TARGET REACHED!\n");
-        // GOAL WAS ALREADY REACHED
-        // chase player
-        return 0;
+    if (!enemy->path.nodes || enemy->path.len < 1 || enemy->path.index == -1) {
+        // no path calcutated
+        return 1;
     }
     
     Vector2 target_node = enemy->path.nodes[enemy->path.index];
@@ -52,7 +51,11 @@ int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
     set_entity_center(&enemy->entity, target_node);
     if (enemy->path.index == enemy->path.len -1) {
         enemy->path.finished = true;
+        enemy->path.index++;
+        enemy->path.current_dir = Vector2Zero();
+        enemy->path.current_speed = 0;
         // GOAL REACHED
+        printf("just reached the goal\n");
         return 0;
     }
     enemy->path.index++;

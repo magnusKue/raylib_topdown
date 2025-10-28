@@ -26,5 +26,5 @@ enemy_t create_enemy(enemy_type_t type);
 void update_enemy(enemy_t* enemy, player_t* player, world_t* world);
 void update_enemies(enemy_t* enemies, int enemy_count, player_t* player, world_t* world);
 
-void render_enemy(enemy_t* enemy);
-void render_enemies(enemy_t* enemies, int enemy_count);
+void render_enemy(enemy_t* enemy, world_t* world);
+void render_enemies(enemy_t* enemies, int enemy_count, world_t* world);

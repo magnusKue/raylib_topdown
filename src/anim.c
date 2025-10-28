@@ -1,11 +1,12 @@
-#include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
 #include <sys/time.h>
 
 # include "../include/anim.h"
 # include "../include/entity.h"
 # include "../include/config.h"
 # include "../include/renderer.h"
+# include "../include/world.h"
 
 Rectangle get_animation_frame(entity_t* entity) {
     unsigned long time_delta = get_time_since_ms(entity->anim.anim_start);
@@ -53,7 +54,7 @@ void entity_face_moving_dir(entity_t* entity) {
     return;
 }
 
-void render_entity(entity_t* entity) {
+void render_entity(entity_t* entity, world_t* world) {
     Vector2 offset = {
         .x = entity->sprite_offset.x * (entity->anim.flipped?-1:1),
         .y = entity->sprite_offset.y,
@@ -82,11 +83,4 @@ void render_entity(entity_t* entity) {
         .rotation = 0.0f,
         .tint = WHITE
     });
-
-    if (get_config_ptr()->render_colliders) {
-        float bottom = get_entity_bottom(entity);
-        Vector2 center = get_entity_center(entity);
-        DrawCircleV((Vector2) { center.x, bottom}, 1.0, BLACK);
-    }
-
 }

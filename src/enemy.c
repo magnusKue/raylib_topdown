@@ -39,7 +39,7 @@ void update_enemies(enemy_t* enemies, int enemy_count, player_t* player, world_t
     }
 }
 
-void render_enemy(enemy_t* enemy) {
+void render_enemy(enemy_t* enemy, world_t* world) {
     if (get_config_ptr()->render_paths && enemy->path.nodes) {
         DrawLineStrip(enemy->path.nodes, enemy->path.len, WHITE);   
         for (int i = 0; i < enemy->path.len; i++) {
@@ -47,12 +47,12 @@ void render_enemy(enemy_t* enemy) {
         }
     }
 
-    render_entity(&enemy->entity);
+    render_entity(&enemy->entity, world);
 }
 
 
-void render_enemies(enemy_t* enemies, int enemy_count) {
+void render_enemies(enemy_t* enemies, int enemy_count, world_t* world) {
     for (int i = 0; i < enemy_count; i++) {
-        render_enemy(&enemies[i]);
+        render_enemy(&enemies[i], world);
     }
 }

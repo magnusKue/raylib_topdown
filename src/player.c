@@ -101,7 +101,7 @@ void update_player(player_t* player, world_t* world) {
     entity_apply_friction(&(player->entity));
 }
 
-void render_player(player_t* player) {
-    render_entity(&player->entity);
+void render_player(player_t* player, world_t* world) {
+    render_entity(&player->entity, world);
 }
 

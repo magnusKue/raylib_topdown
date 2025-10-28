@@ -4,7 +4,8 @@
 #include <sys/time.h>
 
 typedef struct timeval timeval_t;
-typedef struct Entity entity_t; // forward declare
+typedef struct Entity entity_t;
+typedef struct World world_t;
 
 // All the sprite visuals should be handeled here
 // Basic animation system.
@@ -27,7 +28,7 @@ typedef struct Animator {
     timeval_t anim_start;
 } animator_t;
 
-void render_entity(entity_t* entity);
+void render_entity(entity_t* entity, world_t* world);
 
 void entity_face_moving_dir(entity_t* entity);
 

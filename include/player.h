@@ -20,4 +20,4 @@ typedef struct Player {
 
 void init_player(player_t* player);
 void update_player(player_t* player, world_t* world);
-void render_player(player_t* player);
+void render_player(player_t* player, world_t* world);

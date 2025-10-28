@@ -114,7 +114,7 @@ path_t world_get_path(world_t* world, Vector2 start, Vector2 target, int max_sea
 
    int path_len = 0;
    Vector2* path = get_a_star_path(&world->afield, start, goal, max_searches, &path_len);
-
+   
    // scale path from tile to world positions
    for (int i = 0; i < path_len; i++) {
       path[i] = tilemap_to_world_coord(path[i]);

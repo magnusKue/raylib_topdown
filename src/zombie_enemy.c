@@ -7,9 +7,9 @@
 
 # include <raymath.h>
 # include <assert.h>
+# include <stdio.h>
 
-
-#define MAX_TARGET_POS_CHANGE 40.0f /*In pixels*/
+#define MAX_TARGET_POS_CHANGE 16.0f /*In pixels, must be > TILE_SIZE !!!*/
 
 typedef enum Zombie_Enemy_States {
     ZOMBIE_ENEMY_IDLE = 0,
@@ -18,6 +18,7 @@ typedef enum Zombie_Enemy_States {
 
 
 void init_zombie_enemy(enemy_t* enemy) {
+    // anim
     animator_t anim = {
         .texture = LoadTexture("assets/sprites/goblin.png"),
         .anim_speed = 0.008f,
@@ -26,7 +27,21 @@ void init_zombie_enemy(enemy_t* enemy) {
         .frame_count = 4,
     };
     assert(IsTextureValid(anim.texture));
+    
+    // path
     enemy->vision_radius = 30,
+    enemy->path = (path_t) {
+        .len = -1,
+        .nodes = NULL,
+        .target_pos = Vector2Zero(),
+        .index=-1,
+
+        .finished=false,
+        .current_dir = Vector2Zero(),
+        .current_speed = 0,
+    };
+
+    // entity
     enemy->entity = (entity_t) {
         .anim = anim,
         
@@ -42,6 +57,7 @@ void init_zombie_enemy(enemy_t* enemy) {
         .speed_cap = 60.0f,
     };
 
+    // unique functions
     enemy->set_vel_func = &pathfind_player;
     enemy->move_func = &enemy_follow_path;
     enemy->update_anim_func = &update_animation_from_path;
@@ -52,10 +68,24 @@ void new_path(world_t* world, enemy_t* enemy, player_t* player) {
     Vector2 player_tile_pos = world_to_tilemap_coord(get_entity_center(&player->entity));
 
     enemy->path = world_get_path(world, enemy_tile_pos, player_tile_pos, 200);
+    if (enemy->path.len == 0) {
+        enemy->path.finished = true;
+    }
+    
+    // DEBUG:
+    // printf("PATH: ");
+    // for (int i = 0; i < enemy->path.len; i++) {
+    //     printf("[%d, %d] ", (int)enemy->path.nodes[i].x, (int)enemy->path.nodes[i].y);
+    // }
+    // printf("\n");
 }
 
 void pathfind_player(world_t* world, enemy_t* enemy, player_t* player) {
     int dist = Vector2Length(Vector2Subtract(player->entity.position, enemy->entity.position)); 
+    
+    if (dist < 16) {
+        return;
+    }
 
     if (enemy->path.nodes) {
         float target_pos_change = Vector2Length(Vector2Subtract(get_entity_center(&player->entity), tilemap_to_world_coord(enemy->path.target_pos)));
@@ -63,16 +93,17 @@ void pathfind_player(world_t* world, enemy_t* enemy, player_t* player) {
             new_path(world, enemy, player);
             return;
         }
-
     }
 
-    if (!enemy->path.nodes || IsKeyDown(KEY_T) || enemy->path.finished) {
+    if (!enemy->path.nodes) {
         new_path(world, enemy, player);
         return;
     }
 }
 
 void update_animation_from_path(enemy_t* enemy, player_t* player) {
+    // printf("FINISHED: %d, LEN: %d\n", enemy->path.finished, enemy->path.len);
+
     if (enemy->path.current_dir.x != 0) {
         // look in direction of path if there is horizontal movement
         enemy->entity.anim.flipped = enemy->path.current_dir.x < 0;

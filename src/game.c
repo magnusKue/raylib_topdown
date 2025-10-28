@@ -49,8 +49,8 @@ int start_game() {
             if (get_config_ptr()->render_ground) { render_tilemap(tilemap_ground, tileset_sunnyside); }
             if (get_config_ptr()->render_objects) { render_tilemap(tilemap_objects, tileset_sunnyside); }
 
-            render_enemies(world.enemies, world.enemy_counter);
-            render_player(&player);
+            render_enemies(world.enemies, world.enemy_counter, &world);
+            render_player(&player, &world);
 
             ysort_and_render_to_screen();
 
