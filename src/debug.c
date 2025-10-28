@@ -8,7 +8,7 @@ void  render_colliders(player_t* player, world_t* world) {
    if (get_config_ptr()->render_colliders) {
       // PLAYER
       Color col = get_config_ptr()->player_collision ? RED : BLUE;
-      DrawRectangleLinesEx(get_entity_rect(&(player->entity)), 2.0f, col);
+      DrawRectangleLinesEx(get_entity_rect(&(player->entity)), 1.0f, col);
       // TILEMAP
       Rectangle** rects = get_col_tiles_around_entity(&(player->entity), world->col_map);
       render_collision_tiles(rects);

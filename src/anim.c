@@ -5,6 +5,7 @@
 # include "../include/anim.h"
 # include "../include/entity.h"
 # include "../include/config.h"
+# include "../include/renderer.h"
 
 Rectangle get_animation_frame(entity_t* entity) {
     unsigned long time_delta = get_time_since_ms(entity->anim.anim_start);
@@ -66,13 +67,26 @@ void render_entity(entity_t* entity) {
     };
 
     Rectangle source_rect = get_animation_frame(entity);
+    
+    float bottom_ypos = get_entity_bottom(entity);
 
-    DrawTexturePro(entity->anim.texture, source_rect, dest_rect, (Vector2) { 0.0, 0.0 }, 0, WHITE);
-
+    // DrawTexturePro(entity->anim.texture, source_rect, dest_rect, (Vector2) { 0.0, 0.0 }, 0, WHITE);
+    //
+    push_to_render_buffer((renderdata_t) {
+        .type = TEXTURE_PRO,
+        .ypos = bottom_ypos,
+        .texture = entity->anim.texture,
+        .src = source_rect,
+        .dest = dest_rect,
+        .origin = (Vector2) { 0.0f, 0.0f },
+        .rotation = 0.0f,
+        .tint = WHITE
+    });
 
     if (get_config_ptr()->render_colliders) {
+        float bottom = get_entity_bottom(entity);
         Vector2 center = get_entity_center(entity);
-        DrawCircleV(center, 2.0, BLUE);
+        DrawCircleV((Vector2) { center.x, bottom}, 1.0, BLACK);
     }
 
 }

@@ -2,15 +2,17 @@
 
 // Initialize debug_mode to false or true as needed
 config_t global_config = {
-    // DEBUG
+    // --- DEBUG ---
+    // objects
     .render_colliders = false,
-    .render_paths = true,
-    .player_collision = true,
-
+    .render_paths = false,
     // layers
     .render_ground = true,
     .render_objects = true,
     .render_tips = true,
+    
+    // --- PHYSICS ---
+    .player_collision = true,
 };
 
 config_t* get_config_ptr(void) {

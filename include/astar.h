@@ -23,6 +23,8 @@ typedef struct AField {
     anode_t** map;
 } afield_t;
 
+bool is_collider(int i);
+
 void reset_field(afield_t *field, int** map);
 afield_t generate_astar_field(int rows, int columns, int** col_map);
 

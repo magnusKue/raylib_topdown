@@ -1,14 +1,25 @@
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "../include/astar.h"
 
+
+bool is_collider(int i) {
+	if (i == -1 || i == 10) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
 void reset_field(afield_t *field, int** map) {
 	for (int r = 0; r < field->rows; r++) {
 		for (int c = 0; c < field->columns; c++) {
-			bool is_obstacle = map[r][c] != -1 ? true : false;
+			bool is_obstacle = is_collider(map[r][c]);
 
 			field->map[r][c] = (anode_t){
 				.parent = {-1, -1},

@@ -6,6 +6,7 @@
 #include "../include/tilemap.h"
 #include "../include/entity.h"
 #include "../include/config.h"
+#include "../include/astar.h"
 
 Rectangle** get_col_tiles_around_entity(entity_t* entity, tilemap_t* col_map) {
     const int ts = TILE_SIZE; // tile size
@@ -37,7 +38,7 @@ Rectangle** get_col_tiles_around_entity(entity_t* entity, tilemap_t* col_map) {
             // get tile id
             int collider_type = get_tile_at(col_map, tile_x, tile_y);
 
-            if (collider_type == -1) {
+            if (!is_collider(collider_type)) {
                 continue; // No collision (air)
             }
             
@@ -73,6 +74,10 @@ Vector2 get_entity_center(entity_t* entity) {
     Vector2 offset = entity->sprite_size;
     pc = Vector2Add(pc, offset);
     return pc;
+}
+
+float get_entity_bottom(entity_t* entity) {
+    return get_entity_center(entity).y + 0.5*entity->sprite_size.y;
 }
 
 void set_entity_center(entity_t* entity, Vector2 center_pos) {

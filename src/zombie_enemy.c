@@ -7,13 +7,13 @@
 
 # include <raymath.h>
 # include <assert.h>
-# include <stdio.h>
 
 
 #define MAX_TARGET_POS_CHANGE 40.0f /*In pixels*/
 
 typedef enum Zombie_Enemy_States {
     ZOMBIE_ENEMY_IDLE = 0,
+    ZOMBIE_ENEMY_RUNNING = 1,
 } zombie_enemy_states;
 
 
@@ -26,7 +26,7 @@ void init_zombie_enemy(enemy_t* enemy) {
         .frame_count = 4,
     };
     assert(IsTextureValid(anim.texture));
-    enemy->vision_radius = 150,
+    enemy->vision_radius = 30,
     enemy->entity = (entity_t) {
         .anim = anim,
         
@@ -42,9 +42,9 @@ void init_zombie_enemy(enemy_t* enemy) {
         .speed_cap = 60.0f,
     };
 
-    enemy->set_vel_func = &target_player;
+    enemy->set_vel_func = &pathfind_player;
     enemy->move_func = &enemy_follow_path;
-    enemy->update_anim_func = &update_animation_path;
+    enemy->update_anim_func = &update_animation_from_path;
 }
 
 void new_path(world_t* world, enemy_t* enemy, player_t* player) {
@@ -54,32 +54,38 @@ void new_path(world_t* world, enemy_t* enemy, player_t* player) {
     enemy->path = world_get_path(world, enemy_tile_pos, player_tile_pos, 200);
 }
 
-void target_player(world_t* world, enemy_t* enemy, player_t* player) {
-    int dist = Vector2Length(Vector2Subtract(player->entity.position, enemy->entity.position));
-    
+void pathfind_player(world_t* world, enemy_t* enemy, player_t* player) {
+    int dist = Vector2Length(Vector2Subtract(player->entity.position, enemy->entity.position)); 
+
     if (enemy->path.nodes) {
         float target_pos_change = Vector2Length(Vector2Subtract(get_entity_center(&player->entity), tilemap_to_world_coord(enemy->path.target_pos)));
-        printf("target moved %f\n", target_pos_change);
         if (target_pos_change > MAX_TARGET_POS_CHANGE) {
             new_path(world, enemy, player);
             return;
         }
+
     }
 
-    if ((dist <= enemy->vision_radius && !enemy->path.nodes) || IsKeyDown(KEY_T) || enemy->path.finished) {
+    if (!enemy->path.nodes || IsKeyDown(KEY_T) || enemy->path.finished) {
         new_path(world, enemy, player);
         return;
     }
 }
 
-void update_animation_path(enemy_t* enemy) {
-}
-
-void update_animation_velocity(enemy_t* enemy) {
-    if (Vector2Length(enemy->entity.velocity) > 2.0) {
-        play_animation(&(enemy->entity.anim), (int)RUNNING);
+void update_animation_from_path(enemy_t* enemy, player_t* player) {
+    if (enemy->path.current_dir.x != 0) {
+        // look in direction of path if there is horizontal movement
+        enemy->entity.anim.flipped = enemy->path.current_dir.x < 0;
     }
     else {
-        play_animation(&(enemy->entity.anim), (int)IDLE);
+        // when walking only vertiacally look at player
+        enemy->entity.anim.flipped = player->entity.position.x < enemy->entity.position.x;
+    }
+
+    if (enemy->path.current_speed > 0) {
+        play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_RUNNING);
+    }
+    else {
+        play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_IDLE);
     }
 }

@@ -19,7 +19,7 @@ int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
     }
 
     if (enemy->path.finished) {
-        printf("TARGET REACHED!\n");
+        // printf("TARGET REACHED!\n");
         // GOAL WAS ALREADY REACHED
         // chase player
         return 0;
@@ -29,14 +29,17 @@ int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
     Vector2 dir = Vector2Subtract(target_node, get_entity_center(&enemy->entity));
     float dir_len = Vector2Length(dir);
     Vector2 norm_dir = Vector2Normalize(dir);
+    
+    enemy->path.current_dir = norm_dir;
+    enemy->path.current_speed = dir_len;
 
-    printf("Next node posi [%d|%d]\n", (int)dir.x, (int)dir.y);
-    printf("Next direction [%f|%f]\n", norm_dir.x, norm_dir.y);
+    // printf("Next node posi [%d|%d]\n", (int)dir.x, (int)dir.y);
+    // printf("Next direction [%f|%f]\n", norm_dir.x, norm_dir.y);
     
     float speed = enemy->entity.speed_cap * 0.7;
     Vector2 step = Vector2Scale(norm_dir, GetFrameTime() * speed);
     float step_len = Vector2Length(step);
-    printf("Next step into [%f|%f]\n", step.x, step.y);
+    // printf("Next step into [%f|%f]\n", step.x, step.y);
 
     if (step_len < dir_len) {
         Vector2 new_pos = Vector2Add(get_entity_center(&enemy->entity), step);

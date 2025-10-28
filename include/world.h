@@ -3,9 +3,15 @@
 #include "../include/tilemap.h"
 #include "../include/astar.h"
 
+typedef struct Enemy enemy_t;
+typedef enum EnemyType enemy_type_t;
+
 typedef struct World {
     tilemap_t* col_map;
     afield_t afield;
+
+    enemy_t* enemies;
+    int enemy_counter;
 } world_t;
 
 typedef struct Path {
@@ -15,9 +21,13 @@ typedef struct Path {
     int index;
 
     bool finished;
+    Vector2 current_dir;
+    float current_speed;
 } path_t;
 
 void init_world(world_t* world, char* collision_map);
+
+void spawn_enemy(enemy_type_t type, world_t* world, Vector2 position);
 
 Vector2 world_to_tilemap_coord(Vector2 world_pos);
 Vector2 tilemap_to_world_coord(Vector2 tile_pos);

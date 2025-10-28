@@ -1,9 +1,14 @@
 #include <raylib.h>
+#include <assert.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 #include "../include/tilemap.h"
 #include "../include/world.h"
 #include "../include/config.h"
+#include "../include/enemy.h"
+
+#define ENEMY_CAP 1024
 
 void init_world(world_t* world, char* collision_map) {
    world->col_map = load_tilemap(collision_map);
@@ -12,6 +17,24 @@ void init_world(world_t* world, char* collision_map) {
          world->col_map->columns, 
          world->col_map->tmap
    );
+   world->enemies = malloc(sizeof(enemy_t) * ENEMY_CAP);
+   assert(world->enemies);
+   world->enemy_counter = 0;
+}
+
+void push_enemy_to_world(world_t* world, enemy_t enemy) {
+   if (world->enemy_counter >= ENEMY_CAP) {
+      printf("[!!] MAXIUM ENEMY CAP OVERSTEPPED\n");
+      return;
+   }
+
+   world->enemies[world->enemy_counter++] = enemy;
+}
+
+void spawn_enemy(enemy_type_t type, world_t* world, Vector2 position) {
+   enemy_t enemy = create_enemy(type);
+   enemy.entity.position = position;
+   push_enemy_to_world(world, enemy);
 }
 
 
@@ -83,6 +106,8 @@ path_t world_get_path(world_t* world, Vector2 start, Vector2 target, int max_sea
             .target_pos = (Vector2) { -1, -1 },
             .index = -1,
             .finished = true,
+            .current_dir = (Vector2) { -1, -1 },
+            .current_speed = -1,
          }; 
       }
    }
@@ -103,6 +128,8 @@ path_t world_get_path(world_t* world, Vector2 start, Vector2 target, int max_sea
       .target_pos = goal,
       .index = 1, // skip start node, we should already be there
       .finished = false,
+      .current_dir = (Vector2) { 0.0f, 0.0f },
+      .current_speed = 0,
    };
 }
 

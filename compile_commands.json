@@ -149,6 +149,18 @@
       "-c",
       "-o",
       "target",
+      "src/renderer.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/renderer.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
       "src/tilemap.c"
     ],
     "directory": "/home/magnus/code/c/projects/raylib_topdown",
