@@ -81,6 +81,21 @@ void new_path(world_t* world, enemy_t* enemy, player_t* player) {
     // printf("\n");
 }
 
+void zombie_state_machine(world_t* world, enemy_t* enemy, player_t* player) {
+    switch (enemy->entity.anim.state) {
+        case ZOMBIE_ENEMY_IDLE:
+            break;
+        case ZOMBIE_ENEMY_MOVE:
+            // check if a new path is needed (player moved, no path exists yet, )
+            pathfind_player(world, enemy, player);
+            // move to player, first by path then directly
+            enemy_follow_path(enemy, player, world);
+            break;
+        case ZOMBIE_ENEMY_ATTACK:
+            break;
+    } 
+}
+
 void pathfind_player(world_t* world, enemy_t* enemy, player_t* player) {
     int dist = Vector2Length(Vector2Subtract(player->entity.position, enemy->entity.position)); 
     

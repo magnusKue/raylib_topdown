@@ -11,11 +11,24 @@
 #include "../include/player.h"
 #include "../include/enemy.h"
 
+# define TARGET_DIST 5
 
 int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
     if (enemy->path.finished) {
-        // or path finished already
-        // printf("Angriff!");
+        printf("closing in!\n");
+        // target is reached
+        Vector2 player_pos = get_entity_center(&player->entity);
+        player_pos.y -= 3;
+        Vector2 p_to_e = Vector2Subtract(get_entity_center(&enemy->entity), player_pos);
+        Vector2 p_to_e_len_5 = Vector2Scale(Vector2Normalize(p_to_e), 5.0);
+        
+        Vector2 target_point = Vector2Add(player_pos, p_to_e_len_5);
+
+        Vector2 dir_target = Vector2Subtract(target_point, get_entity_center(&enemy->entity));
+        float speed = 2.0;
+        Vector2 step = Vector2Scale(dir_target, GetFrameTime() * speed);
+        enemy->entity.position = Vector2Add(enemy->entity.position, step);
+        enemy->path.current_speed = (int)(Vector2Length(step) * 100);
         return 0;
     }
 
