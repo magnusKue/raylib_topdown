@@ -4,6 +4,7 @@
 
 # include "../include/anim.h"
 # include "../include/entity.h"
+# include "../include/config.h"
 
 Rectangle get_animation_frame(entity_t* entity) {
     unsigned long time_delta = get_time_since_ms(entity->anim.anim_start);
@@ -43,4 +44,35 @@ unsigned long get_time_since_ms(timeval_t begin) {
 
     unsigned long delta_ms = sec_diff * 1000 + usec_diff / 1000;
     return delta_ms;
+}
+
+void entity_face_moving_dir(entity_t* entity) {
+    if (!entity->velocity.x) { return; } 
+    entity->anim.flipped = entity->velocity.x < 0;
+    return;
+}
+
+void render_entity(entity_t* entity) {
+    Vector2 offset = {
+        .x = entity->sprite_offset.x * (entity->anim.flipped?-1:1),
+        .y = entity->sprite_offset.y,
+    };
+
+    Rectangle dest_rect = {
+        entity->position.x + offset.x,
+        entity->position.y + offset.y,
+        entity->bb_size,
+        entity->bb_size,
+    };
+
+    Rectangle source_rect = get_animation_frame(entity);
+
+    DrawTexturePro(entity->anim.texture, source_rect, dest_rect, (Vector2) { 0.0, 0.0 }, 0, WHITE);
+
+
+    if (get_config_ptr()->render_colliders) {
+        Vector2 center = get_entity_center(entity);
+        DrawCircleV(center, 2.0, BLUE);
+    }
+
 }

@@ -18,6 +18,8 @@ void  render_colliders(player_t* player, world_t* world) {
 
 void read_debug_input() {
         if (IsKeyPressed(KEY_TAB)) { get_config_ptr()->render_colliders ^= 1;  }
+        if (IsKeyPressed(KEY_P)) { get_config_ptr()->render_paths ^= 1;  }
+
         if (IsKeyPressed(KEY_F)) { get_config_ptr()->player_collision ^= 1;  }
 
         if (IsKeyPressed(KEY_ONE)) { get_config_ptr()->render_ground ^= 1;  }

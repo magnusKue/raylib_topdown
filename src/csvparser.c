@@ -72,12 +72,12 @@ void read_csv_into_array(char* csv, int** array, int columns) {
 int** allocate_2d_array(int max_row, int max_column) {
     // ALLOCATE BASE ARRAY
     int** array_2d = calloc((size_t)max_row, sizeof(int*));
-    if (!array_2d) { printf("[!] malloc failed"); exit(1); }
+    if (!array_2d) { printf("[!] malloc failed\n"); exit(1); }
 
     // ALLOCATE EACH ROW ARRAY
     for (int r = 0; r < max_row; r++) {
         array_2d[r] = (int*)calloc(max_column, sizeof(int));
-        if (!array_2d[r]) { printf("[!] malloc failed"); exit(1); }
+        if (!array_2d[r]) { printf("[!] malloc failed\n"); exit(1); }
     }
 
     return array_2d;

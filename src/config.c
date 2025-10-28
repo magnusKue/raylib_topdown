@@ -4,6 +4,7 @@
 config_t global_config = {
     // DEBUG
     .render_colliders = false,
+    .render_paths = true,
     .player_collision = true,
 
     // layers

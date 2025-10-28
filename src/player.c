@@ -1,12 +1,14 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../include/player.h"
 #include "../include/world.h"
 #include "../include/config.h"
 #include "../include/entity.h"
 #include "../include/anim.h"
+#include "../include/movement.h"
 
 void init_player(player_t* player) {
     // visual
@@ -18,7 +20,7 @@ void init_player(player_t* player) {
         .state = (int)IDLE,
         .frame_count = 4,
     };
-    if (!IsTextureValid(animt.texture)) {  printf("WARINING: Player texture loading failed"); return; }
+    if (!IsTextureValid(animt.texture)) {  printf("WARINING: Player texture loading failed\n"); exit(1); }
 
     player->entity = (entity_t){
         .anim = animt,
@@ -27,11 +29,8 @@ void init_player(player_t* player) {
         .sprite_offset = (Vector2) { -1, -5 }, // X axis relative to player movement direction 
 
         // Physics
-        .position.x = 0.0f,
-        .position.y = 0.0f,
-
-        .velocity.x = 0.0f,
-        .velocity.y = 0.0f,
+        .position = Vector2Zero(),
+        .velocity = Vector2Zero(),
         
         .acceleration = 1000.0f,
         .friction = 0.001f,
@@ -53,26 +52,6 @@ Rectangle get_player_sprite(player_t* player, unsigned long total_ms) {
         size,
     };
     return rect;
-}
-
-void render_player(player_t* player, unsigned long total_ms) {
-    entity_t* ply_ent = &(player->entity);
-
-    Vector2 offset = {
-        .x = ply_ent->sprite_offset.x * (ply_ent->anim.flipped?-1:1),
-        .y = ply_ent->sprite_offset.y,
-    };
-
-    Rectangle dest_rect = {
-        ply_ent->position.x + offset.x,
-        ply_ent->position.y + offset.y,
-        ply_ent->bb_size,
-        ply_ent->bb_size,
-    };
-
-    Rectangle source_rect = get_animation_frame(&(player->entity));
-
-    DrawTexturePro(player->entity.anim.texture, source_rect, dest_rect, (Vector2) { 0.0, 0.0 }, 0, WHITE);
 }
 
 void player_update_velocity_by_input(player_t* player) {
@@ -111,7 +90,6 @@ void player_update_state(player_t* player) {
 }
 
 void update_player(player_t* player, world_t* world) {
-
     player_update_velocity_by_input(player);
     if (get_config_ptr()->player_collision) {
         entity_move_and_collide(&(player->entity), world);
@@ -121,5 +99,9 @@ void update_player(player_t* player, world_t* world) {
     entity_face_moving_dir(&(player->entity));
     player_update_state(player);
     entity_apply_friction(&(player->entity));
+}
+
+void render_player(player_t* player) {
+    render_entity(&player->entity);
 }
 

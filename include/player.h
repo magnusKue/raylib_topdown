@@ -3,7 +3,6 @@
 #include <raylib.h>
 
 #include "../include/world.h"
-#include "../include/tilemap.h"
 #include "../include/entity.h"
 
 typedef enum State {
@@ -21,4 +20,4 @@ typedef struct Player {
 
 void init_player(player_t* player);
 void update_player(player_t* player, world_t* world);
-void render_player(player_t* player, unsigned long total_ms);
+void render_player(player_t* player);

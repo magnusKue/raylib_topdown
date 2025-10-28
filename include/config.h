@@ -1,7 +1,13 @@
 # pragma once
 
+# include <stdbool.h>
+
+
+# define TILE_SIZE 16
+
 typedef struct Config {
     bool render_colliders;
+    bool render_paths;
     bool player_collision;
 
     // layers

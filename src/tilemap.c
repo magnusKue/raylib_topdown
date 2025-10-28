@@ -1,6 +1,5 @@
 #include <raylib.h>
 
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -11,7 +10,7 @@
 tile_t* create_tile(int tile_size, int x, int y) {
     // allocate memory 
     tile_t* tile_p = (tile_t*)malloc(sizeof(tile_t));
-    if (!tile_p) { printf("[!] malloc failed"); exit(1); }
+    if (!tile_p) { printf("[!] malloc failed\n"); exit(1); }
     
     // write properties
     tile_p->rect = (Rectangle) {
@@ -31,7 +30,7 @@ tileset_t* load_tileset(int tile_size, char* tile_sheet_path) {
     assert(tile_size > 0);
 
     tileset_t* tileset_p = malloc(sizeof(tileset_t));
-    if (!tileset_p) { printf("[!] malloc failed"); exit(1); }
+    if (!tileset_p) { printf("[!] malloc failed\n"); exit(1); }
 
     Texture2D texture = LoadTexture(tile_sheet_path);
     assert(IsTextureValid(texture));
@@ -45,7 +44,7 @@ tileset_t* load_tileset(int tile_size, char* tile_sheet_path) {
     tileset_p->tile_size = tile_size; 
 
     tileset_p->tiles = malloc(sizeof(tile_t*) * total_tiles);
-    if (!tileset_p->tiles) { printf("[!] malloc failed"); exit(1); }
+    if (!tileset_p->tiles) { printf("[!] malloc failed\n"); exit(1); }
     
     // populate tile list
     int index = 0;

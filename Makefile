@@ -10,6 +10,5 @@ clean:
 	rm -f $(TARGET)
 
 run: $(TARGET)
-	rm -f $(TARGET)
 	gcc $(SRC) -o $(TARGET) $(LIB)
 	./$(TARGET)

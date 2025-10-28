@@ -5,8 +5,8 @@
     },
     "activeFile": "sunny_map.tmx",
     "expandedProjectPaths": [
-        "tilesets",
-        "."
+        ".",
+        "tilesets"
     ],
     "fileStates": {
         "main.tsx": {
@@ -23,11 +23,11 @@
             }
         },
         "sunny_map.tmx": {
-            "scale": 3.5939,
-            "selectedLayer": 0,
+            "scale": 4.158,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 165.69743175937003,
-                "y": 86.11814463396311
+                "x": 247.11399711399713,
+                "y": 374.8196248196248
             }
         },
         "sunnyside_world.tsx": {

@@ -17,6 +17,18 @@
       "-c",
       "-o",
       "target",
+      "src/astar.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/astar.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
       "src/camera.c"
     ],
     "directory": "/home/magnus/code/c/projects/raylib_topdown",
@@ -113,10 +125,10 @@
       "-c",
       "-o",
       "target",
-      "src/player.c"
+      "src/movement.c"
     ],
     "directory": "/home/magnus/code/c/projects/raylib_topdown",
-    "file": "/home/magnus/code/c/projects/raylib_topdown/src/player.c",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/movement.c",
     "output": "/home/magnus/code/c/projects/raylib_topdown/target"
   },
   {
@@ -125,10 +137,10 @@
       "-c",
       "-o",
       "target",
-      "src/test_enemy.c"
+      "src/player.c"
     ],
     "directory": "/home/magnus/code/c/projects/raylib_topdown",
-    "file": "/home/magnus/code/c/projects/raylib_topdown/src/test_enemy.c",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/player.c",
     "output": "/home/magnus/code/c/projects/raylib_topdown/target"
   },
   {
@@ -165,6 +177,18 @@
     ],
     "directory": "/home/magnus/code/c/projects/raylib_topdown",
     "file": "/home/magnus/code/c/projects/raylib_topdown/src/world.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/zombie_enemy.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/zombie_enemy.c",
     "output": "/home/magnus/code/c/projects/raylib_topdown/target"
   }
 ]

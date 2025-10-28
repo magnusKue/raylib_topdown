@@ -9,22 +9,20 @@
 #include "../include/config.h"
 #include "../include/debug.h"
 #include "../include/enemy.h"
-#include "../include/test_enemy.h"
+#include "../include/zombie_enemy.h"
 
 int start_game() {
-    unsigned long time_us = 0; // time in µs
-    
     player_t player;
     camera_t camera;
     world_t world;
-    enemy_t test_enemy;
+    enemy_t zombie_enemy;
 
     // Initialize components
     init_window("Game", /*RESOLUTION:*/1920/2, 1200/2, /*FPS:*/600);
     init_player(&player);
     init_camera(&camera, /*ZOOM*/ 5.0);
     init_world(&world, "assets/levels/test_collision.csv");
-    init_test_enemy(&test_enemy);
+    init_zombie_enemy(&zombie_enemy);
     printf("[!] Initialized successfully!\n\n");
     
     tileset_t* tileset_sunnyside = load_tileset(16, "assets/tilesheets/sunnyside.png");
@@ -40,7 +38,7 @@ int start_game() {
         // UPDATE
         update_player(&player, &world);
         update_camera(&camera, &(player.entity));
-        update_enemy(&test_enemy, &player, &world);
+        update_enemy(&zombie_enemy, &player, &world);
 
         read_debug_input();
 
@@ -49,8 +47,8 @@ int start_game() {
             if (get_config_ptr()->render_ground) { render_tilemap(tilemap_ground, tileset_sunnyside); }
             if (get_config_ptr()->render_objects) { render_tilemap(tilemap_objects, tileset_sunnyside); }
 
-            render_player(&player, (int)time_us/1000);
-            DrawCircleV(test_enemy.entity.position, 2.0f, RED);
+            render_enemy(&zombie_enemy);
+            render_player(&player);
 
             if (get_config_ptr()->render_tips) { render_tilemap(tilemap_tips, tileset_sunnyside); }
             if (get_config_ptr()->render_colliders) { render_tilemap(world.col_map, tileset_collision); }
@@ -58,8 +56,6 @@ int start_game() {
             render_colliders(&player, &world);
 
         render_to_window(&camera);
-
-        time_us += GetFrameTime() * 1000000;
     }
 
     // cleanup_window(&window);
