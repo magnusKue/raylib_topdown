@@ -13,7 +13,8 @@
 
 typedef enum Zombie_Enemy_States {
     ZOMBIE_ENEMY_IDLE = 0,
-    ZOMBIE_ENEMY_RUNNING = 1,
+    ZOMBIE_ENEMY_MOVE = 1,
+    ZOMBIE_ENEMY_ATTACK = 2,
 } zombie_enemy_states;
 
 
@@ -114,9 +115,9 @@ void update_animation_from_path(enemy_t* enemy, player_t* player) {
     }
 
     if (enemy->path.current_speed > 0) {
-        play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_RUNNING);
+        play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_MOVE);
     }
     else {
-        play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_IDLE);
+        play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_ATTACK);
     }
 }
