@@ -107,7 +107,7 @@ path_t world_get_path(world_t* world, Vector2 start, Vector2 target, int max_sea
             .index = -1,
             .finished = true,
             .current_dir = (Vector2) { -1, -1 },
-            .current_speed = -1,
+            .currently_moving = false,
          }; 
       }
    }
@@ -129,7 +129,7 @@ path_t world_get_path(world_t* world, Vector2 start, Vector2 target, int max_sea
       .index = 1, // skip start node, we should already be there
       .finished = false,
       .current_dir = (Vector2) { 0.0f, 0.0f },
-      .current_speed = 0,
+      .currently_moving = false,
    };
 }
 

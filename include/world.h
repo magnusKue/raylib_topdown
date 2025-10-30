@@ -22,7 +22,7 @@ typedef struct Path {
 
     bool finished;
     Vector2 current_dir;
-    float current_speed;
+    bool currently_moving;
 } path_t;
 
 void init_world(world_t* world, char* collision_map);

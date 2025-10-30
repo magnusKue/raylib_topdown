@@ -7,6 +7,7 @@
 #include "../include/entity.h"
 #include "../include/config.h"
 #include "../include/astar.h"
+#include "../include/player.h"
 
 Rectangle** get_col_tiles_around_entity(entity_t* entity, tilemap_t* col_map) {
     const int ts = TILE_SIZE; // tile size
@@ -78,6 +79,10 @@ Vector2 get_entity_center(entity_t* entity) {
 
 float get_entity_bottom(entity_t* entity) {
     return get_entity_center(entity).y + 0.5*entity->sprite_size.y;
+}
+
+void entity_face_player(entity_t* entity, player_t* player) {
+    entity->anim.flipped = entity->position.x > player->entity.position.x;
 }
 
 void set_entity_center(entity_t* entity, Vector2 center_pos) {

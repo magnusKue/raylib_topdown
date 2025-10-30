@@ -5,6 +5,8 @@ typedef enum Rendertype {
 } rendertype_t;
 
 typedef struct Renderdata {
+    // debug
+    char name[21];
     // texture pro
     rendertype_t type;
     float ypos;

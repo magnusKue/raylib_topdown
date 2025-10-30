@@ -14,10 +14,10 @@ typedef struct Enemy {
     path_t path;
 
     int vision_radius;
+    void* data;
 
-    void (*set_vel_func)(world_t*, enemy_t*, player_t*);
-    int (*move_func)(enemy_t*, player_t*, world_t*);
-    void (*update_anim_func)(enemy_t*, player_t*);
+    void (*execute_state)(world_t*, enemy_t*, player_t*);
+    void (*update_state)(world_t*, enemy_t*, player_t*);
 
 } enemy_t;
 

@@ -30,7 +30,7 @@ void init_zombie_enemy(enemy_t* enemy) {
     assert(IsTextureValid(anim.texture));
     
     // path
-    enemy->vision_radius = 30,
+    enemy->vision_radius = 100,
     enemy->path = (path_t) {
         .len = -1,
         .nodes = NULL,
@@ -39,12 +39,16 @@ void init_zombie_enemy(enemy_t* enemy) {
 
         .finished=false,
         .current_dir = Vector2Zero(),
-        .current_speed = 0,
+        .currently_moving = 0,
     };
 
     // entity
     enemy->entity = (entity_t) {
+        .health = 20,
+
         .anim = anim,
+        .action_timer = 0,
+        .tint = WHITE,
         
         .bb_size = 16,
         .sprite_size = (Vector2) { 8.0f, 8.0f }, 
@@ -59,9 +63,8 @@ void init_zombie_enemy(enemy_t* enemy) {
     };
 
     // unique functions
-    enemy->set_vel_func = &pathfind_player;
-    enemy->move_func = &enemy_follow_path;
-    enemy->update_anim_func = &update_animation_from_path;
+    enemy->execute_state = &zombie_execute_state;
+    enemy->update_state = &zombie_update_state;
 }
 
 void new_path(world_t* world, enemy_t* enemy, player_t* player) {
@@ -72,37 +75,9 @@ void new_path(world_t* world, enemy_t* enemy, player_t* player) {
     if (enemy->path.len == 0) {
         enemy->path.finished = true;
     }
-    
-    // DEBUG:
-    // printf("PATH: ");
-    // for (int i = 0; i < enemy->path.len; i++) {
-    //     printf("[%d, %d] ", (int)enemy->path.nodes[i].x, (int)enemy->path.nodes[i].y);
-    // }
-    // printf("\n");
-}
-
-void zombie_state_machine(world_t* world, enemy_t* enemy, player_t* player) {
-    switch (enemy->entity.anim.state) {
-        case ZOMBIE_ENEMY_IDLE:
-            break;
-        case ZOMBIE_ENEMY_MOVE:
-            // check if a new path is needed (player moved, no path exists yet, )
-            pathfind_player(world, enemy, player);
-            // move to player, first by path then directly
-            enemy_follow_path(enemy, player, world);
-            break;
-        case ZOMBIE_ENEMY_ATTACK:
-            break;
-    } 
 }
 
 void pathfind_player(world_t* world, enemy_t* enemy, player_t* player) {
-    int dist = Vector2Length(Vector2Subtract(player->entity.position, enemy->entity.position)); 
-    
-    if (dist < 16) {
-        return;
-    }
-
     if (enemy->path.nodes) {
         float target_pos_change = Vector2Length(Vector2Subtract(get_entity_center(&player->entity), tilemap_to_world_coord(enemy->path.target_pos)));
         if (target_pos_change > MAX_TARGET_POS_CHANGE) {
@@ -117,22 +92,76 @@ void pathfind_player(world_t* world, enemy_t* enemy, player_t* player) {
     }
 }
 
-void update_animation_from_path(enemy_t* enemy, player_t* player) {
-    // printf("FINISHED: %d, LEN: %d\n", enemy->path.finished, enemy->path.len);
+void reset_action_timer(enemy_t* enemy) {
+    gettimeofday(&enemy->entity.action_timer, NULL);
+}
 
-    if (enemy->path.current_dir.x != 0) {
-        // look in direction of path if there is horizontal movement
-        enemy->entity.anim.flipped = enemy->path.current_dir.x < 0;
+void zombie_tick_attack(enemy_t* enemy, player_t* player) {
+    int attack_frequency = 500;
+    long int time_since = get_time_since_ms(enemy->entity.action_timer);
+    if (time_since >= attack_frequency) {
+        gettimeofday(&enemy->entity.action_timer, NULL);
+        hurt_player(player, 1);
     }
-    else {
-        // when walking only vertiacally look at player
-        enemy->entity.anim.flipped = player->entity.position.x < enemy->entity.position.x;
+}
+
+void zombie_execute_state(world_t* world, enemy_t* enemy, player_t* player) {
+    // printf("path finished: %d\n", (int)enemy->path.finished);
+    switch (enemy->entity.anim.state) {
+        case ZOMBIE_ENEMY_IDLE:
+            break;
+        case ZOMBIE_ENEMY_MOVE:
+            // check if a new path is needed (player moved, no path exists yet, )
+            pathfind_player(world, enemy, player);
+            // move to player, first by path then directly
+            enemy_follow_path(enemy, player, world);
+            break;
+        case ZOMBIE_ENEMY_ATTACK:
+            zombie_tick_attack(enemy, player);
+            break;
+    } 
+}
+
+void zombie_update_state(world_t* world, enemy_t* enemy, player_t* player) {
+    float dist_player = Vector2Length(Vector2Subtract(player->entity.position, enemy->entity.position));
+
+    switch (enemy->entity.anim.state) {
+        case ZOMBIE_ENEMY_IDLE:
+            entity_face_player(&enemy->entity, player);
+            
+            if (dist_player < enemy->vision_radius) {
+                play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_MOVE);
+            }
+            break;
+            
+
+        case ZOMBIE_ENEMY_MOVE:
+            // --- FACE PATH OR PLAYER
+            if (enemy->path.current_dir.x != 0) {
+                // look in direction of path if there is horizontal movement
+                enemy->entity.anim.flipped = enemy->path.current_dir.x < 0;
+            }
+            else {
+                // when walking only vertiacally look at player
+                enemy->entity.anim.flipped = player->entity.position.x < enemy->entity.position.x;
+            }
+
+            // SWITCH STATE
+
+            if (!enemy->path.currently_moving) {
+                play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_ATTACK);
+                reset_action_timer(enemy);
+            }
+            break;
+
+
+        case ZOMBIE_ENEMY_ATTACK:
+            entity_face_player(&enemy->entity, player);
+            // if distance to player too big switch to movement
+            if (dist_player > 10) {
+                play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_MOVE);
+            }
+            break;
     }
 
-    if (enemy->path.current_speed > 0) {
-        play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_MOVE);
-    }
-    else {
-        play_animation(&enemy->entity.anim, ZOMBIE_ENEMY_ATTACK);
-    }
 }

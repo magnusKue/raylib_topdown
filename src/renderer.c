@@ -66,12 +66,22 @@ void sort_render_buffer() {
     qsort(r->buffer, r->buffer_counter, sizeof(renderdata_t), compare_objects);
 }
 
+void print_render_buffer_names() {
+    renderer_t* r = get_renderer_ptr();
+    for (int i = 0; i < r->buffer_counter; i++) {
+        printf("[%s] ", r->buffer[i].name);
+    }
+    printf("\n");
+}
+
 void ysort_and_render_to_screen() {
     renderer_t* r = get_renderer_ptr();
     
     sort_render_buffer();
 
-    for (int i = 0; i < r->buffer_capacity; i++) {
+    // print_render_buffer_names();
+
+    for (int i = 0; i < r->buffer_counter; i++) {
         // render
         int type = r->buffer[i].type;
         renderdata_t* data = &r->buffer[i];

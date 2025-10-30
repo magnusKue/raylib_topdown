@@ -10,7 +10,8 @@
 #include "../include/config.h"
 #include "../include/debug.h"
 #include "../include/enemy.h"
-#include "../include/zombie_enemy.h"
+#include "../include/item.h"
+#include "../include/item_sword.h"
 
 int start_game() {
     player_t player;
@@ -34,7 +35,7 @@ int start_game() {
     tilemap_t* tilemap_ground    = load_tilemap("assets/levels/test_ground.csv");
     printf("\n[!] Loaded tilemaps successfully!\n\n");
     
-    spawn_enemy(ZOMBIE, &world, Vector2Zero());
+    spawn_enemy(ZOMBIE, &world, (Vector2) { 200, 10 } );
 
     while (!WindowShouldClose()) {
         // UPDATE
@@ -43,6 +44,15 @@ int start_game() {
         update_enemies(world.enemies, world.enemy_counter, &player, &world);
 
         read_debug_input();
+        if (IsKeyPressed(KEY_E)) { 
+            if (!player.current_item) {
+                equip_item(&player, create_item_sword());
+            }
+            else {
+                unequip_item(&player);
+            }
+        }
+
 
         // RENDER
         start_render(&camera);

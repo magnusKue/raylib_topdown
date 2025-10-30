@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
 
 #include "../include/world.h"
@@ -15,10 +14,8 @@
 
 int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
     if (enemy->path.finished) {
-        printf("closing in!\n");
         // target is reached
         Vector2 player_pos = get_entity_center(&player->entity);
-        player_pos.y -= 3;
         Vector2 p_to_e = Vector2Subtract(get_entity_center(&enemy->entity), player_pos);
         Vector2 p_to_e_len_5 = Vector2Scale(Vector2Normalize(p_to_e), 5.0);
         
@@ -28,7 +25,7 @@ int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
         float speed = 2.0;
         Vector2 step = Vector2Scale(dir_target, GetFrameTime() * speed);
         enemy->entity.position = Vector2Add(enemy->entity.position, step);
-        enemy->path.current_speed = (int)(Vector2Length(step) * 100);
+        enemy->path.currently_moving = Vector2Length(step) > 0.001;
         return 0;
     }
 
@@ -43,7 +40,7 @@ int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
     Vector2 norm_dir = Vector2Normalize(dir);
     
     enemy->path.current_dir = norm_dir;
-    enemy->path.current_speed = dir_len;
+    enemy->path.currently_moving = dir_len > 0.2;
 
     // printf("Next node posi [%d|%d]\n", (int)dir.x, (int)dir.y);
     // printf("Next direction [%f|%f]\n", norm_dir.x, norm_dir.y);
@@ -66,9 +63,8 @@ int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
         enemy->path.finished = true;
         enemy->path.index++;
         enemy->path.current_dir = Vector2Zero();
-        enemy->path.current_speed = 0;
+        enemy->path.currently_moving = false;
         // GOAL REACHED
-        printf("just reached the goal\n");
         return 0;
     }
     enemy->path.index++;

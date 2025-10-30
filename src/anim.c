@@ -4,7 +4,6 @@
 
 # include "../include/anim.h"
 # include "../include/entity.h"
-# include "../include/config.h"
 # include "../include/renderer.h"
 # include "../include/world.h"
 
@@ -22,7 +21,6 @@ Rectangle get_animation_frame(entity_t* entity) {
         size,
     };
 
-    // printf("%f|%f player: \n", rect.x, rect.y);
     return rect;
 }
 
@@ -71,9 +69,8 @@ void render_entity(entity_t* entity, world_t* world) {
     
     float bottom_ypos = get_entity_bottom(entity);
 
-    // DrawTexturePro(entity->anim.texture, source_rect, dest_rect, (Vector2) { 0.0, 0.0 }, 0, WHITE);
-    //
     push_to_render_buffer((renderdata_t) {
+        .name = "Entity",
         .type = TEXTURE_PRO,
         .ypos = bottom_ypos,
         .texture = entity->anim.texture,
@@ -81,6 +78,6 @@ void render_entity(entity_t* entity, world_t* world) {
         .dest = dest_rect,
         .origin = (Vector2) { 0.0f, 0.0f },
         .rotation = 0.0f,
-        .tint = WHITE
+        .tint = entity->tint,
     });
 }

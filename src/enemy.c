@@ -22,15 +22,11 @@ enemy_t create_enemy(enemy_type_t type) {
 }
 
 void update_enemy(enemy_t* enemy, player_t* player, world_t* world) {
-    assert(enemy->set_vel_func != NULL);
-    assert(enemy->move_func != NULL);
-    assert(enemy->update_anim_func != NULL);
+    assert(enemy->execute_state != NULL);
+    assert(enemy->update_state != NULL);
 
-    enemy->set_vel_func(world, enemy, player);
-    enemy->move_func(enemy, player, world);
-    enemy->update_anim_func(enemy, player);
-
-    entity_face_moving_dir(&(enemy->entity));
+    enemy->execute_state(world, enemy, player);
+    enemy->update_state(world, enemy, player);
 }
 
 void update_enemies(enemy_t* enemies, int enemy_count, player_t* player, world_t* world) {
