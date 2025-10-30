@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
 #include "../include/world.h"
@@ -11,10 +12,12 @@
 #include "../include/enemy.h"
 
 # define TARGET_DIST 5
+# define SPEED_CAP 20
 
 int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
     if (enemy->path.finished) {
-        // target is reached
+        // target is reached or unreachable
+
         Vector2 player_pos = get_entity_center(&player->entity);
         Vector2 p_to_e = Vector2Subtract(get_entity_center(&enemy->entity), player_pos);
         Vector2 p_to_e_len_5 = Vector2Scale(Vector2Normalize(p_to_e), 5.0);
@@ -23,9 +26,22 @@ int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
 
         Vector2 dir_target = Vector2Subtract(target_point, get_entity_center(&enemy->entity));
         float speed = 2.0;
-        Vector2 step = Vector2Scale(dir_target, GetFrameTime() * speed);
-        enemy->entity.position = Vector2Add(enemy->entity.position, step);
-        enemy->path.currently_moving = Vector2Length(step) > 0.001;
+        Vector2 step = Vector2Scale(dir_target, GetFrameTime() * speed * 1000);
+        float step_len = Vector2Length(step);
+        if (step_len < 0.1) {
+            set_entity_center(&enemy->entity, target_point);
+        }
+        float max_len = SPEED_CAP * 1000 * GetFrameTime();
+        if (step_len > max_len) {
+            step = Vector2Scale(Vector2Normalize(step), max_len);
+        }
+        printf("step: %f\n", step_len);
+        enemy->path.currently_moving = step_len > 0.1;
+
+        // enemy->entity.position = Vector2Add(enemy->entity.position, step);
+        enemy->entity.velocity = step;
+        entity_move_and_collide(&enemy->entity, world);
+        enemy->entity.velocity = (Vector2){ 0, 0 };
         return 0;
     }
 

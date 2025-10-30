@@ -5,6 +5,11 @@
 typedef struct Player player_t;
 typedef struct World world_t;
 
+typedef struct ItemTransl {
+    Vector2 position;
+    float rotation;
+} item_transl_t;
+
 typedef enum ItemType {
     MEELE_WEAPON,
 } itemtype_t;
