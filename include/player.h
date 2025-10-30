@@ -5,7 +5,8 @@
 
 #include "../include/world.h"
 #include "../include/entity.h"
-#include "../include/item.h"
+
+typedef struct Item item_t;
 
 typedef enum State {
     // index == spritesheet row
@@ -14,7 +15,9 @@ typedef enum State {
 } state_t;
 
 typedef struct Player {
+    // item
     item_t* current_item;
+    timeval_t last_item_action;
 
     // visual
     float anim_speed;

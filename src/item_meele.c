@@ -1,4 +1,5 @@
 # include <stdlib.h>
+# include <stdio.h>
 # include <assert.h>
 
 # include "../include/item_meele.h"
@@ -17,3 +18,9 @@ item_t* create_meele_item_base() {
 
     return item_p;
 }
+
+void meele_item_attack(player_t* player, world_t* world) {
+    printf("TODO: make it attack stuff\n");
+
+}
+

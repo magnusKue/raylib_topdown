@@ -11,10 +11,15 @@
 #include "../include/anim.h"
 #include "../include/movement.h"
 #include "../include/renderer.h"
+#include "../include/item.h"
 
 void init_player(player_t* player) {
 
     player->current_item = NULL;
+    gettimeofday(&player->last_damage, NULL);
+    player->last_item_action.tv_usec = 0;
+    player->last_item_action.tv_sec = 0;
+
     player->no_arms_tex = LoadTexture("assets/sprites/player_no_hand.png");
     assert(IsTextureValid(player->no_arms_tex));
 
@@ -156,6 +161,11 @@ void player_update_state(player_t* player) {
 }
 
 void update_player(player_t* player, world_t* world) {
+    // use item
+    if (IsKeyDown(KEY_SPACE)) {
+        do_item_action(player, world);
+    }
+
     player_update_velocity_by_input(player);
     if (get_config_ptr()->player_collision) {
         entity_move_and_collide(&(player->entity), world);

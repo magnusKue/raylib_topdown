@@ -13,7 +13,8 @@ typedef struct ItemDataMeele {
     float attack_speed;
 } itemdata_meele_t;
 
-
 itemdata_meele_t* get_meele_data(void* data);
 
 item_t* create_meele_item_base();
+
+void meele_item_attack(player_t* player, world_t* world);

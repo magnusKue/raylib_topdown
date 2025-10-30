@@ -35,8 +35,8 @@ int enemy_follow_path(enemy_t* enemy, player_t* player, world_t* world) {
         if (step_len > max_len) {
             step = Vector2Scale(Vector2Normalize(step), max_len);
         }
-        printf("step: %f\n", step_len);
-        enemy->path.currently_moving = step_len > 0.1;
+        // printf("step: %f\n", step_len);
+        enemy->path.currently_moving = step_len > 10;
 
         // enemy->entity.position = Vector2Add(enemy->entity.position, step);
         enemy->entity.velocity = step;
