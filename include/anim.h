@@ -3,6 +3,9 @@
 #include <raylib.h>
 #include <sys/time.h>
 
+typedef struct ItemTransl item_transl_t;
+typedef struct Item item_t;
+typedef struct Player player_t;
 typedef struct timeval timeval_t;
 typedef struct Entity entity_t;
 typedef struct World world_t;
@@ -37,3 +40,5 @@ void play_animation(animator_t* anim, int state);
 unsigned long get_time_since_ms(timeval_t begin);
 
 Rectangle get_animation_frame(entity_t* entity);
+
+item_transl_t get_item_animation_frame(item_t* item, player_t* player);

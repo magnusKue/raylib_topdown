@@ -21,6 +21,5 @@ item_t* create_meele_item_base() {
 
 void meele_item_attack(player_t* player, world_t* world) {
     printf("TODO: make it attack stuff\n");
-
 }
 

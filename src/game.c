@@ -12,6 +12,7 @@
 #include "../include/enemy.h"
 #include "../include/item.h"
 #include "../include/item_sword.h"
+#include "../include/item_lance.h"
 
 int start_game() {
     player_t player;

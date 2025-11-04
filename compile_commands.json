@@ -113,6 +113,54 @@
       "-c",
       "-o",
       "target",
+      "src/item.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/item.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/item_lance.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/item_lance.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/item_meele.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/item_meele.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
+      "src/item_sword.c"
+    ],
+    "directory": "/home/magnus/code/c/projects/raylib_topdown",
+    "file": "/home/magnus/code/c/projects/raylib_topdown/src/item_sword.c",
+    "output": "/home/magnus/code/c/projects/raylib_topdown/target"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "target",
       "src/main.c"
     ],
     "directory": "/home/magnus/code/c/projects/raylib_topdown",

@@ -1,11 +1,14 @@
 #include <assert.h>
-#include <stdlib.h>
+#include <stdio.h>
 #include <sys/time.h>
 
 # include "../include/anim.h"
 # include "../include/entity.h"
+# include "../include/player.h"
 # include "../include/renderer.h"
 # include "../include/world.h"
+# include "../include/item.h"
+# include "../include/item_meele.h"
 
 Rectangle get_animation_frame(entity_t* entity) {
     unsigned long time_delta = get_time_since_ms(entity->anim.anim_start);
@@ -80,4 +83,31 @@ void render_entity(entity_t* entity, world_t* world) {
         .rotation = 0.0f,
         .tint = entity->tint,
     });
+}
+
+item_transl_t get_item_animation_frame(item_t* item, player_t* player) {
+    itemdata_meele_t* item_data = get_meele_data(item->item_data);
+    
+    item_transl_t translation = { Vector2Zero(), .0f };
+    
+    long int anim_time = get_time_since_ms(player->last_item_action);
+    
+    if (anim_time >= item_data->animation_length_ms) { return translation; };
+
+    double time_fraction = ((float)anim_time / item_data->animation_length_ms);
+    double current_index = item_data->used_frames * time_fraction;
+    int index_int = floor(current_index);
+    double frac = current_index - index_int;
+    // printf("INDEX: %d TIME: %ld FRAME_T: %lf\n", index_int, anim_time, frac);
+    
+    if (index_int >= item_data->used_frames - 1) {
+        translation = item_data->animation[index_int];
+    }
+    else {
+        // lerp
+        translation = lerp_item_transl(item_data->animation[index_int], item_data->animation[index_int+1], frac);
+    }
+        // no lerping for last element
+
+    return translation;
 }

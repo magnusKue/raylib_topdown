@@ -116,6 +116,7 @@ void equip_item(player_t* player, item_t* item) {
 }
 
 void unequip_item(player_t* player) {
+    if (!player->current_item) {return;};
     UnloadTexture(player->current_item->sprite);
     free_item(player->current_item);
     player->current_item = NULL;  
@@ -123,17 +124,25 @@ void unequip_item(player_t* player) {
 
 void render_player_item(player_t* player) {
     item_t* item = player->current_item;
+
+    item_transl_t anim_offset = { Vector2Zero(), .0f };
+    if (item->get_item_anim_transl) {
+        // item has animation
+        anim_offset = item->get_item_anim_transl(item, player);
+    }
     
     int what_the_flip = player->entity.anim.flipped ? -1 : 1;
+    int flip_dep_ply_width = player->entity.anim.flipped * player->entity.sprite_size.x;
+
     Vector2 item_size = { item->sprite.width, item->sprite.height };
 
-    Vector2 flip_rend_offs = item->render_offset;
+    Vector2 flip_rend_offs = Vector2Add(item->render_offset, anim_offset.position);
     flip_rend_offs.x *= what_the_flip;
 
     Rectangle src = { 0, 0, item_size.x * what_the_flip, item_size.y };
     Rectangle dest = { 
-        player->entity.position.x + flip_rend_offs.x, 
-        player->entity.position.y + flip_rend_offs.y, 
+        player->entity.position.x + flip_rend_offs.x - flip_dep_ply_width + (item->rot_origin_offs.x * what_the_flip) + flip_dep_ply_width,
+        player->entity.position.y + flip_rend_offs.y + item->rot_origin_offs.y,
         item_size.x, item_size.y 
     };
 
@@ -145,8 +154,8 @@ void render_player_item(player_t* player) {
         .texture = item->sprite,
         .src = src,
         .dest = dest,
-        .origin = (Vector2) { 0.0f, 0.0f },
-        .rotation = 0.0f,
+        .origin = (Vector2){item->rot_origin_offs.x - flip_dep_ply_width, item->rot_origin_offs.y},
+        .rotation = anim_offset.rotation * what_the_flip,
         .tint = WHITE,
     });
 }

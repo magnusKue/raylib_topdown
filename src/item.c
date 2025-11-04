@@ -21,3 +21,10 @@ void do_item_action(player_t* player, world_t* world) {
     }
 }
 
+item_transl_t lerp_item_transl(item_transl_t a, item_transl_t b, float factor) {
+    item_transl_t new_transl = a;
+    new_transl.position.x += factor * (b.position.x-new_transl.position.x);
+    new_transl.position.y += factor * (b.position.y-new_transl.position.y);
+    new_transl.rotation += factor * (b.rotation-new_transl.rotation);
+    return new_transl;
+}

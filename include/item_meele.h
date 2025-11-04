@@ -6,8 +6,10 @@
 
 typedef struct ItemDataMeele {
     int damage;
+
     item_transl_t animation[10];
-    int used_animation_frames;
+    int used_frames;
+    int animation_length_ms;
     
     Rectangle hurtbox;
     float attack_speed;
