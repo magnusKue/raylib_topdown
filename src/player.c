@@ -142,18 +142,17 @@ void render_player_item(player_t* player) {
     Vector2 flipped_rend_offs = Vector2Add(item->render_offset, anim_offset.position);
     flipped_rend_offs.x *= what_the_flip;
 
+    Vector2 flipped_anim_offs = anim_offset.position;
+    flipped_anim_offs.x *= what_the_flip;
+
+    float origin_offs_x = item->rot_origin_offs.x + (item_size.x * player->entity.anim.flipped);
+
     Rectangle src = { 0, 0, item_size.x * what_the_flip, item_size.y };
     Rectangle dest = { 
-        player->entity.position.x + flip_dep_ply_width + flipped_rend_offs.x - flipped_item_size.x, // + (item->rot_origin_offs.x * what_the_flip) + flip_dep_ply_width,
-        player->entity.position.y + flipped_rend_offs.y, // + item->rot_origin_offs.y,
+        player->entity.position.x + flip_dep_ply_width + flipped_rend_offs.x - flipped_item_size.x + flipped_anim_offs.x + origin_offs_x,
+        player->entity.position.y + flipped_rend_offs.y + item->rot_origin_offs.y,
         item_size.x, item_size.y 
     };
-
-    printf("DEST: %f, %f\n", dest.x, dest.y);
-    printf("FDPW: %d\n", flip_dep_ply_width);
-    printf("FIS.x: %f\n", flipped_item_size.x);
-    printf("PLAYER: %f, %f\n", player->entity.position.x, player->entity.position.y);
-    player->entity.position = Vector2Zero();
 
     float player_ypos = get_entity_bottom(&player->entity);
     push_to_render_buffer((renderdata_t) {
@@ -163,7 +162,7 @@ void render_player_item(player_t* player) {
         .texture = item->sprite,
         .src = src,
         .dest = dest,
-        .origin = Vector2Zero(),//(Vector2){item->rot_origin_offs.x - flip_dep_ply_width, item->rot_origin_offs.y},
+        .origin = (Vector2) {origin_offs_x, item->rot_origin_offs.y}, 
         .rotation = anim_offset.rotation * what_the_flip,
         .tint = WHITE,
     });

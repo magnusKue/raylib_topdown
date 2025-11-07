@@ -46,13 +46,13 @@ int start_game() {
 
         read_debug_input();
         if (IsKeyPressed(KEY_E)) { 
-            if (!player.current_item) {
-                equip_item(&player, create_item_sword());
-            }
-            else {
-                unequip_item(&player);
-            }
+            unequip_item(&player);
+            equip_item(&player, create_item_sword());
         }
+        if (IsKeyPressed(KEY_R)) { 
+            unequip_item(&player);
+            equip_item(&player, create_item_lance());
+        } 
 
 
         // RENDER
