@@ -132,19 +132,28 @@ void render_player_item(player_t* player) {
     }
     
     int what_the_flip = player->entity.anim.flipped ? -1 : 1;
-    int flip_dep_ply_width = player->entity.anim.flipped * player->entity.sprite_size.x;
+    int flip_dep_ply_width = player->entity.anim.flipped * player->entity.bb_size;
 
     Vector2 item_size = { item->sprite.width, item->sprite.height };
+    
+    Vector2 flipped_item_size = item_size;
+    flipped_item_size.x *= player->entity.anim.flipped;
 
-    Vector2 flip_rend_offs = Vector2Add(item->render_offset, anim_offset.position);
-    flip_rend_offs.x *= what_the_flip;
+    Vector2 flipped_rend_offs = Vector2Add(item->render_offset, anim_offset.position);
+    flipped_rend_offs.x *= what_the_flip;
 
     Rectangle src = { 0, 0, item_size.x * what_the_flip, item_size.y };
     Rectangle dest = { 
-        player->entity.position.x + flip_rend_offs.x - flip_dep_ply_width + (item->rot_origin_offs.x * what_the_flip) + flip_dep_ply_width,
-        player->entity.position.y + flip_rend_offs.y + item->rot_origin_offs.y,
+        player->entity.position.x + flip_dep_ply_width + flipped_rend_offs.x - flipped_item_size.x, // + (item->rot_origin_offs.x * what_the_flip) + flip_dep_ply_width,
+        player->entity.position.y + flipped_rend_offs.y, // + item->rot_origin_offs.y,
         item_size.x, item_size.y 
     };
+
+    printf("DEST: %f, %f\n", dest.x, dest.y);
+    printf("FDPW: %d\n", flip_dep_ply_width);
+    printf("FIS.x: %f\n", flipped_item_size.x);
+    printf("PLAYER: %f, %f\n", player->entity.position.x, player->entity.position.y);
+    player->entity.position = Vector2Zero();
 
     float player_ypos = get_entity_bottom(&player->entity);
     push_to_render_buffer((renderdata_t) {
@@ -154,7 +163,7 @@ void render_player_item(player_t* player) {
         .texture = item->sprite,
         .src = src,
         .dest = dest,
-        .origin = (Vector2){item->rot_origin_offs.x - flip_dep_ply_width, item->rot_origin_offs.y},
+        .origin = Vector2Zero(),//(Vector2){item->rot_origin_offs.x - flip_dep_ply_width, item->rot_origin_offs.y},
         .rotation = anim_offset.rotation * what_the_flip,
         .tint = WHITE,
     });

@@ -7,7 +7,7 @@
 
 item_t* create_item_sword() {
     item_t* item_p = create_meele_item_base();
-    item_p->rot_origin_offs = (Vector2) { 0, 16 };
+    item_p->rot_origin_offs = (Vector2) { 0, 0 };
 
     itemdata_meele_t* data = get_meele_data(item_p->item_data);
     data->animation[0] = (item_transl_t) {(Vector2) {0,0}, (float) 0.0f};
